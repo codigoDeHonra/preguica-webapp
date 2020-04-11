@@ -132,15 +132,18 @@
 
 
                     <v-row xs12 sm6 md3>
-                        <v-select
-                            :items="getAsset"
+
+                        <v-autocomplete
+                            v-model="trade.asset"
                             item-text="name"
                             item-value="_id"
-                            box
-                            label="Ativo"
-                            v-model="trade.asset"
+                            :items="getAsset"
+                            filled 
+                            dense
                             return-object
-                        ></v-select>
+                            label="Outlined"
+                            ></v-autocomplete>
+
                     </v-row>
 
                     <v-row xs12 sm6 md3>
@@ -165,18 +168,28 @@
             </v-card>
         </v-dialog>
 
+        <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+            filled
+            />
+
         <v-data-table
             :headers="headers"
             :items="getDashboard.trades"
             class="elevation-1"
             :must-sort="true"
+            :search="search"
         >
         <template  v-slot:item="{ item, index }">
                 <tr >
                     <td class="text-xs-left">{{ index +1}}</td>
                     <td class="text-xs-left">{{ item.date | dateFormat}}</td>
                     <!--td class="text-xs-left">{{ categoryItem(props.item) }}</td-->
-                    <td class="text-xs-left">{{ item.asset.name }}</td>
+                    <td class="text-xs-left">{{ item.assetObj.name }}</td>
                     <td class="text-xs-right">{{ item.investiment }}</td>
                     <td class="text-xs-right">{{ item.payout }}</td>
                     <td :class="[item.payout > 0 ? 'green': 'red', 'lighten-5 justify-center']">
@@ -246,19 +259,23 @@
                             <td class="text-xs-right">{{ item.payout }}</td>
                             <td class="justify-center ">{{ total(item).toFixed(2) }}</td>
                             <td class="justify-center layout px-0">
-                                <v-icon
-                                    small
-                                    class="mr-2"
-                                    @click="openUpdateModal(item)"
-                                >
-                                    edit
-                                </v-icon>
-                                <v-icon
-                                    small
-                                    @click="deleteItem(item)"
-                                >
-                                    delete
-                                </v-icon>
+                                <v-btn>
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="openUpdateModal(item)"
+                                    >
+                                        mdi-pencil
+                                    </v-icon>
+                                </v-btn>
+                                <v-btn>
+                                    <v-icon
+                                        small
+                                        @click="deleteItem(item)"
+                                    >
+                                        mdi-delete
+                                    </v-icon>
+                                </v-btn>
                             </td>
                         </tr>
                     </template>
@@ -280,6 +297,7 @@
     name: 'Dashboard',
     data(){
       return {
+          search: '',
           fixedPayout: 0.0,
           fixedInvestiment: 2,
           initialInvestiment: 100.0,
@@ -299,7 +317,7 @@
               },
               {
                   text: 'Asset',
-                  value: 'asset',
+                  value: 'asset.name',
                   align: 'left',
                   sortable: false
               },

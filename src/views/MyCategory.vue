@@ -10,38 +10,29 @@
                     <bar v-if="Object.keys(g).length > 0" :chart-data="g"></bar>
                 </v-col>
                 <v-col>
-
-                                    <v-select
-                                        :items="getCategory"
-                                        clearable
-                                        filled
-                                        item-text="name"
-                                        item-value="name"
-                                        label="Categoria"
-                                        v-model="categoryFilter"
-                                    ></v-select>
-                    <v-text-field
-                        v-model="search"
-                        append-icon="mdi-magnify"
-                        label="Search"
-                        single-line
-                        hide-details
-                        filled
-                    />
                     <v-data-table
                         :headers="headers"
-                        :items="assets"
+                        :items="getCategoryByWallet"
                         class="elevation-1"
                         :must-sort="true"
-                        :search="search"
                     >
-                        <template v-slot:item="{ item, index }">
+                    <template v-slot:item="{ item, index }">
                             <tr>
                                 <td class="text-xs-left">{{ index + 1  }}</td>
-                                <td class="text-xs-left">{{ item.asset.name }}</td>
-                                <td class="text-xs-left">{{ item.category }}</td>
-                                <td class="text-xs-right">{{ item.investiment }}</td>
-                                <td class="text-xs-right">{{ item.perc }}</td>
+                                <td class="text-xs-left">{{ item.name }}</td>
+                                <td class="text-xs-left">{{ item.total }}</td>
+                                <td class="justify-center layout px-0">
+                                    <v-btn
+                                        :to="`/meus-ativos`"
+                                        text
+                                    >
+                                        <v-icon
+                                            class="mr-2"
+                                        >
+                                            mdi-eye
+                                        </v-icon>
+                                    </v-btn>
+                                </td>
                             </tr>
                         </template>
                     </v-data-table>
@@ -58,15 +49,13 @@
   import Bar from '../components/Pie'
 
   export default {
-    name: 'Dashboard',
+    name: 'MyWallet',
       components:{
           Bar
       },
     data(){
       return {
-        search: '',
-          categoryFilter: '',
-                  datacollection: null,
+          datacollection: null,
           pagination: { rowsPerPage: 10 },
           fixedPayout: 0.0,
           fixedInvestiment: 2,
@@ -78,36 +67,19 @@
               {
                   text: '#',
                   sortable: false,
-                  align: 'left',
-                  filterable: false,
+                  align: 'left'
               },
               {
                   text: 'Asset',
-                  value: 'asset.name',
+                  value: 'asset',
                   align: 'left',
-                  sortable: true,
-                  filterable: true,
-              },
-              {
-                  text: 'Categoria',
-                  value: 'category',
-                  align: 'left',
-                  sortable: true,
-                  filterable: true,
+                  sortable: false
               },
               {
                   text: 'Investimento',
-                  value: 'asset.invesment',
+                  value: 'invesment',
                   align: 'right',
-                  sortable: false,
-                  filterable: false,
-              },
-              {
-                  text: '%',
-                  value: 'perc',
-                  align: 'right',
-                  filterable: false,
-                  sortable: true,
+                  sortable: false
               },
           ],
           editedIndex: -1,
@@ -148,6 +120,8 @@
       await this.syncBrokerAction()
       await this.syncAssetAction()
       await this.countAction()
+      await this.syncCategoryByWalletAction(this.$route.params.id)
+
     },
     computed: {
         ...mapGetters({
@@ -155,6 +129,7 @@
             getCount: 'dashboard/getCount',
             getUsuario: 'usuario/usuarioGetter',
             getCategory: 'category/categoryGetter',
+            getCategoryByWallet: 'category/byWalletGetter',
             brokerGetter: 'broker/brokerGetter',
             getAsset: 'asset/assetGetter',
         }),
@@ -173,20 +148,12 @@
             let datasets = []
             let colors = []
             let d = {} 
-            let total = 0
 
-            this.getCount.forEach(function (element){
-              total += element.total
+            this.getCategoryByWallet.forEach(function (element){
+              labels.push(element.name)    
+              colors.push(vm.dynamicColors())
+              datasets.push(element.total)
             })
-            if(total){
-                this.getCount.forEach( (element) => {
-                if(this.categoryFilter==element.category || this.categoryFilter == '' || this.categoryFilter == undefined) {
-                    labels.push(element.name + ' ' + parseFloat((element.total/total)*100).toFixed(2) + '%')    
-                    colors.push(vm.dynamicColors())
-                    datasets.push(element.total)
-                }
-                })
-            }
 
             d = { 
                 labels: labels, 
@@ -200,33 +167,6 @@
                 return d 
             } else {
                 return {}
-            }
-        },
-        assets() {
-            let d = [] 
-            let total = 0
-
-            this.getCount.forEach(function (element){
-              total += element.total
-            })
-
-            this.getCount.forEach( (element) => {
-                if(this.categoryFilter==element.category || this.categoryFilter == '' || this.categoryFilter == undefined) {
-
-                    d.push({
-                        asset:{name: element.name} ,
-                        perc: parseFloat(parseFloat((element.total/total)*100).toFixed(2)),
-                        investiment: element.total,
-                        category: element.category
-                    }) 
-                }
-            })
-            console.log(d)
-
-            if(d.length > 0 ){
-                return d 
-            } else {
-                return [] 
             }
         }
     },
@@ -244,6 +184,7 @@
             insertSessionAction: 'dashboard/insertSessionAction',
             removeAllSessionAction: 'dashboard/removeAllSessionAction',
             syncCategoryAction: 'category/syncAction',
+            syncCategoryByWalletAction: 'category/syncByWalletAction',
             syncBrokerAction: 'broker/syncAction',
             syncAssetAction: 'asset/syncAction',
         }),

@@ -69,9 +69,14 @@ const routes = [
       component: () => import(/* webpackChunkName: "Carteira" */ '../views/Wallet.vue')
     },
     {
-        path: '/carteira/:id',
+      path: '/minhas-carteiras',
       name: 'carteira-id',
       component: () => import(/* webpackChunkName: "Carteira" */ '../views/MyWallet.vue')
+    },
+    {
+        path: '/minhas-categorias/:id',
+      name: 'carteira-id',
+      component: () => import(/* webpackChunkName: "Carteira" */ '../views/MyCategory.vue')
     },
     {
       path: '/meus-ativos',

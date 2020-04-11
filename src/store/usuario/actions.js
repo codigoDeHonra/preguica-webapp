@@ -14,7 +14,7 @@ export const  setUserLoginAction = ({ commit }, params) => {
                 text: 'Bem vindo!',
             },
             { root: true });
-            router.push('/dashboard')
+            router.push('/minhas-carteiras')
         })
         .catch((r)=> {
             console.log('teste', r)
