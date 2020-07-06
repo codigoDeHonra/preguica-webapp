@@ -62,6 +62,15 @@ export const syncAction = ({ commit }, params) => {
         .catch(()=> { })
 };
 
+export const showAction = ({ commit }, params) => {
+   console.log(params) 
+    asset.show(params)
+        .then((response) => {
+            commit(types.SHOW_ASSET, response.data);
+        })
+        .catch(()=> { })
+};
+
 export const  removeAction = ({ commit }, params) => {
     asset.remove(params._id)
         .then(() => {

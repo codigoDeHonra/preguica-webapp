@@ -9,6 +9,11 @@
             justify-center
         >
             <v-col
+                cols="12"
+            >
+            <v-subheader><h3>Categoria</h3></v-subheader>
+            </v-col>
+            <v-col
                 xs12
                 sm4
                 elevation-6
@@ -27,7 +32,7 @@
                                     item-text="name"
                                     item-value="_id"
                                     label="Carteira"
-                                    v-model="categoryItem.wallet"
+                                    v-model="categoryItem.get_wallet"
                                     return-object
                                 />
                                 <v-text-field
@@ -35,6 +40,12 @@
                                     required
                                     filled 
                                     label="Nome"
+                                />
+                                <v-text-field
+                                    v-model="categoryItem.percentageInWallet"
+                                    required
+                                    filled 
+                                    label="% na Carteira"
                                 />
                                 <v-layout justify-space-between>
                                     <v-btn
@@ -46,9 +57,8 @@
                                      {{ this.categoryItem._id ? 'Atualizar': 'Cadastrar' }}
                                     </v-btn>
                                     <v-btn
-                                        :class=" { 'green darken-4 white--text' : valid, disabled: !valid }"
-                                        color="teal lighten-1"
-                                        dark
+                                        color="red"
+                                       text 
                                         @click="reset()"
                                     >
                                     Cancelar
@@ -73,7 +83,8 @@
         <template  v-slot:item="{item}">
                 <tr >
                     <td class="text-xs-left">{{ item.name }}</td>
-                    <td class="text-xs-left">{{ item.wallet.name }}</td>
+                    <td class="text-xs-left">{{ item.get_wallet.name }}</td>
+                    <td class="text-xs-left">{{ item.percentageInWallet }}</td>
                     <td class="justify-center layout px-0">
                         <v-icon
                             class="mr-2"
@@ -98,7 +109,7 @@
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-    name:'Login',
+    name:'Category',
     data() {
         return {
             valid: true,
@@ -118,6 +129,12 @@ export default {
                   {
                       text: 'Carteira',
                       value: 'wallet',
+                      sortable: false,
+                      align: 'left'
+                  },
+                  {
+                      text: '% na Carteira',
+                      value: 'percentageInWallet',
                       sortable: false,
                       align: 'left'
                   },
@@ -160,7 +177,8 @@ export default {
             const category = { 
                 _id: this.categoryItem._id, 
                 name: this.categoryItem.name, 
-                wallet: this.categoryItem.wallet, 
+                wallet: this.categoryItem.get_wallet ? this.categoryItem.get_wallet: this.categoryItem.wallet , 
+                percentageInWallet: this.categoryItem.percentageInWallet,
             };
 
             if(this.categoryItem._id) {

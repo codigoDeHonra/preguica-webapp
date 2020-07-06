@@ -3,16 +3,27 @@
         fluid
         fill-height
     >
+        <v-row>
+            <v-col>
+                <h3>Minhas Carteiras</h3>
+            </v-col>
+        </v-row>
         <v-row
             flex
             align-center
             justify-center
         >
-            <v-col>
-                <bar v-if="Object.keys(g).length > 0" :chart-data="g"></bar>
+            <v-col cols="3">
+                <v-card
+                    class="mx-auto"
+                >
+                <v-card-text>
+                    <bar v-if="Object.keys(g).length > 0" :chart-data="g"></bar>
+                </v-card-text>
+                </v-card>
             </v-col>
             <v-col
-                cols="6"
+                cols="9"
             >
                 <v-data-table
                     v-if="Object.keys(g).length > 0"
@@ -21,18 +32,16 @@
                     class="elevation-1"
                     :must-sort="true"
                 >
-                <template  v-slot:item="{ item, index }">
+                    <template  v-slot:item="{ item, index }">
                         <tr >
                             <td class="text-xs-left">{{ item.name }}</td>
-                            <td class="text-xs-left">{{ walletCountGetter[index].total }}</td>
-                            <td class="justify-center layout px-0">
+                            <td class="text-right">{{ walletCountGetter[index].total | money }}</td>
+                            <td class="justify-center layout">
                                 <v-btn
                                     :to="`/minhas-categorias/${item._id}`"
                                     text
                                 >
-                                    <v-icon
-                                        class="mr-2"
-                                    >
+                                    <v-icon>
                                         mdi-eye
                                     </v-icon>
                                 </v-btn>
@@ -46,13 +55,17 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-  import Bar from '../components/Pie'
+import Bar from '../components/Pie'
+import money from '../filters/money'
 
 export default {
-    name:'Login',
-      components:{
-          Bar
-      },
+    name:'MyWallet',
+    components:{
+        Bar
+    },
+    filters: {
+       money
+    },
     data() {
         return {
             valid: true,
@@ -69,21 +82,21 @@ export default {
                       text: 'Investimento',
                       value: null,
                       sortable: false,
-                      align: 'left'
+                      align: 'right'
                   },
                   {
                       text: 'Ações',
                       value: null,
                       sortable: false,
-                      align: 'left'
+                      align: 'center'
                   },
             ],
             walletItem: {}
         };
     },
     async created() {
-      await this.syncWalletAction()
-      await this.syncWalletCountAction()
+      //await this.syncWalletAction()
+      //await this.syncWalletCountAction()
     },
     computed: {
         ...mapGetters({
@@ -98,11 +111,14 @@ export default {
             let colors = []
             let d = {} 
 
-            this.walletCountGetter.forEach(function (element){
-              labels.push(element.name)    
-              colors.push(vm.dynamicColors())
-              datasets.push(element.total)
-            })
+            if (Object.keys(this.walletCountGetter)){
+
+                this.walletCountGetter.forEach(function (element){
+                    labels.push(element.name)    
+                    colors.push(vm.dynamicColors())
+                    datasets.push(element.total)
+                })
+            }
 
             d = { 
                 labels: labels, 
@@ -119,49 +135,12 @@ export default {
             }
         }
     },
-    watch: {
-        usuarioGetter(value) {
-            if (value.status) {
-                window.location.replace(value.redirect);
-            }
-        },
-    },
     methods: {
         ...mapActions({
-            insertWalletAction: 'wallet/insertAction',
             syncWalletAction: 'wallet/syncAction',
-            removeAction: 'wallet/removeAction',
-            updateWalletAction: 'wallet/updateAction',
             syncCategoryAction: 'category/syncAction',
             syncWalletCountAction: 'wallet/syncCountAction',
         }),
-        submit() {
-            const wallet = { 
-                _id: this.walletItem._id, 
-                name: this.walletItem.name, 
-                category: this.walletItem.category, 
-            };
-
-            if(this.walletItem._id) {
-                this.updateWalletAction(wallet);
-            } else {
-                this.insertWalletAction(wallet);
-            }
-
-        },
-        deleteItem (item) {
-            const index = this.walletGetter.indexOf(item)
-            // console.log(item)
-            item.index = index
-            confirm('Tem certeza?') && this.removeAction(item)
-        },
-        openUpdateModal (item) {
-            const index = this.walletGetter.indexOf(item)
-            this.walletItem = this.walletGetter[index]
-        },
-        reset () {
-            this.walletItem = {} 
-        },
         dynamicColors () {
             var r = Math.floor(Math.random() * 255);
             var g = Math.floor(Math.random() * 255);

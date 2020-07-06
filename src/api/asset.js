@@ -2,6 +2,8 @@ import * as http from './http';
 
 export const sync = (data) => http.get('/asset', data);
 
+export const show = (data) => http.get(`/asset/${data.code}`);
+
 export const insert = (data) => http.post('/asset', data);
 
 export const remove = (id) => http.del(`/asset`, id);

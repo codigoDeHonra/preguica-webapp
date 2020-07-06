@@ -1,18 +1,27 @@
 <template>
     <div>
         <v-container  flud grid-list-md text-xs-center>
+            <v-row>
+                <v-col>
+                    <h3>Minhas Categorias</h3>
+                </v-col>
+            </v-row>
             <v-row
                 flex
                 align-center
                 justify-center
             >
-                <v-col>
-                    <bar v-if="Object.keys(g).length > 0" :chart-data="g"></bar>
+                <v-col cols="3">
+                    <v-card
+                        class="mx-auto"
+                        >
+                        <bar v-if="Object.keys(g).length > 0" :chart-data="g"></bar>
+                    </v-card>
                 </v-col>
                 <v-col>
                     <v-data-table
                         :headers="headers"
-                        :items="getCategoryByWallet"
+                        :items="categories"
                         class="elevation-1"
                         :must-sort="true"
                     >
@@ -20,7 +29,9 @@
                             <tr>
                                 <td class="text-xs-left">{{ index + 1  }}</td>
                                 <td class="text-xs-left">{{ item.name }}</td>
-                                <td class="text-xs-left">{{ item.total }}</td>
+                                <td class="text-xs-left">{{ item.investiment }}</td>
+                                <td class="text-xs-left">{{ item.percentageInWallet }}</td>
+                                <td class="text-xs-left">{{ item.perc }}</td>
                                 <td class="justify-center layout px-0">
                                     <v-btn
                                         :to="`/meus-ativos`"
@@ -70,7 +81,7 @@
                   align: 'left'
               },
               {
-                  text: 'Asset',
+                  text: 'Categoria',
                   value: 'asset',
                   align: 'left',
                   sortable: false
@@ -78,6 +89,24 @@
               {
                   text: 'Investimento',
                   value: 'invesment',
+                  align: 'right',
+                  sortable: false
+              },
+              {
+                  text: '% na Carteira',
+                  value: 'percentageInWallet',
+                  align: 'right',
+                  sortable: false
+              },
+              {
+                  text: '% Atual na Carteira',
+                  value: 'perc',
+                  align: 'right',
+                  sortable: false
+              },
+              {
+                  text: 'Ações',
+                  value: null,
                   align: 'right',
                   sortable: false
               },
@@ -142,6 +171,43 @@
         computedDateFormatted () {
             return this.formatDate(this.date)
         },
+        categories() {
+            let d = [] 
+            let total = 0
+
+            if(Object.keys(this.getCategoryByWallet).length) {
+                this.getCategoryByWallet.forEach(function (element){
+                  total += element.total
+                })
+
+                this.getCategoryByWallet.forEach( (element) => {
+                    console.log(element)
+                    /*if(
+                        (this.categoryFilter==element.category || this.categoryFilter == '' || this.categoryFilter == undefined) && 
+                        (this.walletFilter==element.wallet || this.walletFilter == '' || this.walletFilter == undefined)
+                    ) {*/
+
+                        d.push({
+                            asset:{ name: element.name } ,
+                            _id: element._id,
+                            name: element.name,
+                            perc: parseFloat(parseFloat((element.total/total)*100).toFixed(2)),
+                            investiment: element.total,
+                            category: element.category,
+                            wallet: element.wallet,
+                            percentageInWallet: element.percentageInWallet
+                        }) 
+                    //}
+                })
+            }
+            console.log(d)
+
+            if(d.length > 0 ){
+                return d 
+            } else {
+                return [] 
+            }
+        },
         g() {
             let vm = this
             let labels = []
@@ -149,11 +215,13 @@
             let colors = []
             let d = {} 
 
-            this.getCategoryByWallet.forEach(function (element){
-              labels.push(element.name)    
-              colors.push(vm.dynamicColors())
-              datasets.push(element.total)
-            })
+            if(this.getCategoryByWallet.length) {
+                this.getCategoryByWallet.forEach(function (element){
+                  labels.push(element.name)    
+                  colors.push(vm.dynamicColors())
+                  datasets.push(element.total)
+                })
+            }
 
             d = { 
                 labels: labels, 

@@ -2,18 +2,30 @@ import * as types from './types';
 import * as usuario from '@/api/usuario'
 import router from '../../router'
 
-export const  setUserLoginAction = ({ commit }, params) => {
+export const  setUserLoginAction = ({ commit, dispatch }, params) => {
 
     usuario.login(params)
         .then((response) => {
             const { data } = response
+
             commit(types.SET_USUARIO_LOGIN, data)
-            commit('noticias/SET_DADOS', {
-                ativo: true,
-                color: 'green',
-                text: 'Bem vindo!',
-            },
-            { root: true });
+
+            commit(
+                'noticias/SET_DADOS', 
+                {
+                    ativo: true,
+                    color: 'green',
+                    text: 'Bem vindo!',
+                },
+                { root: true }
+            );
+
+            dispatch(
+                'profile/syncAction', 
+                data._id, 
+                { root: true }
+            )
+
             router.push('/minhas-carteiras')
         })
         .catch((r)=> {
@@ -33,12 +45,18 @@ export const  insertUserAction = ({ commit }, params) => {
         .then((response) => {
             const { data } = response
             commit(types.INSERT_USUARIO, data)
-            commit('noticias/SET_DADOS', {
-                ativo: true,
-                color: 'green',
-                text: 'Salvo!',
-            },
-            { root: true });
+            commit(
+                'noticias/SET_DADOS', 
+                {
+                    ativo: true,
+                    color: 'green',
+                    text: 'Salvo!',
+                    timeout: 1000
+                },
+                { root: true }
+            );
+
+            router.push({name: 'login'})
         })
         .catch(()=> {
             commit('noticias/SET_DADOS', {

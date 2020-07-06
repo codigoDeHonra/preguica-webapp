@@ -39,6 +39,11 @@ const routes = [
       component: () => import(/* webpackChunkName: "Dashboard" */ '../views/Dashboard.vue')
     },
     {
+      path: '/extrato',
+      name: 'extract',
+      component: () => import(/* webpackChunkName: "Extract" */ '../views/Extract.vue')
+    },
+    {
       path: '/',
       name: 'login',
       component: () => import(/* webpackChunkName: "Login" */ '../views/Login.vue')
@@ -64,6 +69,11 @@ const routes = [
       component: () => import(/* webpackChunkName: "Asset" */ '../views/Asset.vue')
     },
     {
+      path: '/ativo/:code/detalhes',
+      name: 'asset-details',
+      component: () => import(/* webpackChunkName: "Asset" */ '../views/AssetDetails.vue')
+    },
+    {
       path: '/carteira',
       name: 'carteira',
       component: () => import(/* webpackChunkName: "Carteira" */ '../views/Wallet.vue')
@@ -82,6 +92,26 @@ const routes = [
       path: '/meus-ativos',
       name: 'MyAssets',
       component: () => import(/* webpackChunkName: "MyAssets" */ '../views/MyAssets.vue')
+    },
+    {
+      path: '/minhas-corretoras',
+      name: 'MyAssets',
+      component: () => import(/* webpackChunkName: "MyAssets" */ '../views/MyBroker.vue')
+    },
+    {
+      path: '/perfil',
+      name: 'perfil',
+      component: () => import(/* webpackChunkName: "MyAssets" */ '../views/Profile.vue')
+    },
+    {
+      path: '/meus-perfis',
+      name: 'perfil',
+      component: () => import(/* webpackChunkName: "MyAssets" */ '../views/MyProfiles.vue')
+    },
+    {
+        path: '/config/importar',
+      name: 'config-importar',
+      component: () => import(/* webpackChunkName: "MyAssets" */ '../views/ImportCEI.vue')
     }
   ]
 

@@ -8,17 +8,20 @@
             align-center
             justify-center
         >
-            <v-col>
+            <v-col cols="12">
+                <v-subheader><h3>Carteiras</h3></v-subheader>
+            </v-col>
+            <v-col cols="4">
                 <bar v-if="Object.keys(g).length > 0" :chart-data="g"></bar>
             </v-col>
             <v-col
-                cols="6"
+                cols="4"
                 elevation-6
             >
                 <v-card class="green darken-4 justify-center">
                     <v-card-text class="pt-4 white">
                         <div>
-                            <h3>Wallet: {{ this.walletItem.name }}</h3>
+                            <h3>Carteira: {{ this.walletItem.name }}</h3>
                             <v-form
                                 ref="form"
                                 v-model="valid"
@@ -39,12 +42,12 @@
                                      {{ this.walletItem._id ? 'Atualizar': 'Cadastrar' }}
                                     </v-btn>
                                     <v-btn
-                                        :class=" { 'green darken-4 white--text' : valid, disabled: !valid }"
-                                        color="teal lighten-1"
+                                        color="red"
                                         dark
+                                        text
                                         @click="reset()"
                                     >
-                                    Cancelar
+                                        Cancelar
                                     </v-btn>
                                 </v-layout>
                             </v-form>
@@ -53,43 +56,13 @@
                 </v-card>
             </v-col>
             <v-col
-                cols="6"
+                cols="4"
             >
-                <v-data-table
-                    :headers="headers"
+                <wallet-table 
                     :items="walletGetter"
-                    class="elevation-1"
-                    :must-sort="true"
-                >
-                <template  v-slot:item="{ item }">
-                        <tr >
-                            <td class="text-xs-left">{{ item.name }}</td>
-                            <td class="justify-center layout px-0">
-                                <v-btn
-                                    :to="`/carteira/${item._id}`"
-                                    text
-                                >
-                                    <v-icon
-                                        class="mr-2"
-                                    >
-                                        mdi-eye
-                                    </v-icon>
-                                </v-btn>
-                                <v-icon
-                                    class="mr-2"
-                                    @click="openUpdateModal(item)"
-                                >
-                                    mdi-pencil
-                                </v-icon>
-                                <v-icon
-                                    @click="deleteItem(item)"
-                                >
-                                    mdi-delete
-                                </v-icon>
-                            </td>
-                        </tr>
-                    </template>
-                </v-data-table>
+                    @update-wallet="openUpdateModal"
+                    @delete-wallet="deleteItem"
+                />
             </v-col>
         </v-row>
     </v-container>
@@ -97,11 +70,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
   import Bar from '../components/Pie'
+  import WalletTable from '../components/wallet/Table'
 
 export default {
-    name:'Login',
+    name:'Wallet',
       components:{
-          Bar
+          Bar,
+          WalletTable
       },
     data() {
         return {

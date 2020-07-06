@@ -1,2 +1,2 @@
-export const assetGetter = state => state.asset;
+export const profileGetter = state => state.profiles;
 export const assetItemGetter = state => state.assetItem;

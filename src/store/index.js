@@ -9,19 +9,23 @@ import category from './category/index'
 import broker from './broker/index'
 import asset from './asset/index'
 import wallet from './wallet/index'
+import study from './study/index'
+import profile from './profile/index'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  modules: {
-    global,
-    usuario,
-    dashboard,
-    noticias,
-    category,
-    broker,
-    asset,
-   wallet 
-  },
-  debug: true,
+    modules: {
+        global,
+        usuario,
+        dashboard,
+        noticias,
+        category,
+        broker,
+        asset,
+        wallet,
+        study,
+        profile
+    },
+    debug: true,
 })

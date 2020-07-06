@@ -10,6 +10,7 @@ import axios from "axios";
 
 let config = {
   // baseURL: process.env.baseURL || process.env.apiUrl || ""
+  baseURL: process.env.VUE_APP_API
   // timeout: 60 * 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
@@ -19,6 +20,13 @@ const _axios = axios.create(config);
 _axios.interceptors.request.use(
   function(config) {
     // Do something before request is sent
+
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (user) {
+        config.headers.Authorization = `Bearer ${user.token}`;
+    }
+
     return config;
   },
   function(error) {

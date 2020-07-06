@@ -1,29 +1,60 @@
 <template>
     <div>
         <v-container  flud grid-list-md text-xs-center>
+        <v-row>
+        <v-col>
+            <h3>Meus Ativos</h3>
+        </v-col>
+        </v-row>
             <v-row
                 flex
                 align-center
                 justify-center
             >
-                <v-col>
+                <v-col cols="6">
                     <bar v-if="Object.keys(g).length > 0" :chart-data="g"></bar>
                 </v-col>
-                <v-col>
-
-                                    <v-select
-                                        :items="getCategory"
-                                        clearable
-                                        filled
-                                        item-text="name"
-                                        item-value="name"
-                                        label="Categoria"
-                                        v-model="categoryFilter"
-                                    ></v-select>
+            </v-row>
+            <v-row
+                flex
+                align="center"
+                justify="center"
+            >
+                <v-col xl="4" cols="6">
+                    <v-select
+                        :items="walletGetter"
+                        filled
+                        clearable
+                        item-text="name"
+                        item-value="name"
+                        label="Carteira"
+                        v-model="walletFilter"
+                        prepend-icon="mdi-wallet"
+                        />
+                </v-col>
+                <v-col xl="4" cols="6">
+                    <v-select
+                        :items="getCategory"
+                        clearable
+                        filled
+                        item-text="name"
+                        prepend-icon="mdi-folder"
+                        item-value="name"
+                        label="Categoria"
+                        v-model="categoryFilter"
+                    />
+                </v-col>
+            </v-row>
+            <v-row
+                flex
+                align-center
+                justify-center
+            >
+                <v-col class="mx-auto" xl="8" cols="12">
                     <v-text-field
                         v-model="search"
                         append-icon="mdi-magnify"
-                        label="Search"
+                        label="Pesquisa"
                         single-line
                         hide-details
                         filled
@@ -38,10 +69,22 @@
                         <template v-slot:item="{ item, index }">
                             <tr>
                                 <td class="text-xs-left">{{ index + 1  }}</td>
-                                <td class="text-xs-left">{{ item.asset.name }}</td>
+                                <td class="text-center">
+                                    <v-btn 
+                                        text
+                                        :to="{ name: 'asset-details', params: { code: item.asset.name}}">
+                                        {{ item.asset.name }}
+                                    </v-btn>
+                                </td>
+                                <td class="text-xs-left">{{ item.wallet }}</td>
                                 <td class="text-xs-left">{{ item.category }}</td>
-                                <td class="text-xs-right">{{ item.investiment }}</td>
-                                <td class="text-xs-right">{{ item.perc }}</td>
+                                <td class="text-right">{{ item.amount }}</td>
+                                <td class="text-right">{{ item.investiment.toFixed(2) }}</td>
+                                <td class="text-right">{{ item.investimentNow.toFixed(2) }}</td>
+                                <td class="text-right">{{ item.pnl.toFixed(2) }}</td>
+                                <td class="text-right">{{ item.mediumPrice.toFixed(2) }}</td>
+                                <td class="text-right">{{ item.price }}</td>
+                                <td class="text-right">{{ item.perc }}</td>
                             </tr>
                         </template>
                     </v-data-table>
@@ -58,15 +101,16 @@
   import Bar from '../components/Pie'
 
   export default {
-    name: 'Dashboard',
+    name: 'MyAssets',
       components:{
           Bar
       },
     data(){
       return {
         search: '',
+        walletFilter: '',
           categoryFilter: '',
-                  datacollection: null,
+          datacollection: null,
           pagination: { rowsPerPage: 10 },
           fixedPayout: 0.0,
           fixedInvestiment: 2,
@@ -82,8 +126,15 @@
                   filterable: false,
               },
               {
-                  text: 'Asset',
+                  text: 'Ativo',
                   value: 'asset.name',
+                  align: 'center',
+                  sortable: true,
+                  filterable: true,
+              },
+              {
+                  text: 'Carteira',
+                  value: 'wallet',
                   align: 'left',
                   sortable: true,
                   filterable: true,
@@ -93,13 +144,48 @@
                   value: 'category',
                   align: 'left',
                   sortable: true,
-                  filterable: true,
+                  filterable: false,
+              },
+              {
+                  text: 'Quantidade',
+                  value: 'category',
+                  align: 'right',
+                  sortable: true,
+                  filterable: false,
               },
               {
                   text: 'Investimento',
                   value: 'asset.invesment',
                   align: 'right',
-                  sortable: false,
+                  sortable: true,
+                  filterable: false,
+              },
+              {
+                  text: 'Investimento Atual',
+                  value: 'asset.invesmentNow',
+                  align: 'right',
+                  sortable: true,
+                  filterable: false,
+              },
+              {
+                  text: 'L/P',
+                  value: 'asset.invesmentNow',
+                  align: 'right',
+                  sortable: true,
+                  filterable: false,
+              },
+              {
+                  text: 'Preço medio',
+                  value: 'category',
+                  align: 'right',
+                  sortable: true,
+                  filterable: false,
+              },
+              {
+                  text: 'Preço Atual',
+                  value: 'asset.price',
+                  align: 'right',
+                  sortable: true,
                   filterable: false,
               },
               {
@@ -129,7 +215,6 @@
               broker: '',
               amount: 0
           },
-          pairs:['EUR/USD', 'USD/CHF', 'AUD/CAD', 'USD/JPY', 'GBP/USD'],
           date: new Date().toISOString().substr(0, 10),
           menu: false,
           modal: false,
@@ -148,6 +233,7 @@
       await this.syncBrokerAction()
       await this.syncAssetAction()
       await this.countAction()
+      //await this.syncWalletAction()
     },
     computed: {
         ...mapGetters({
@@ -157,6 +243,7 @@
             getCategory: 'category/categoryGetter',
             brokerGetter: 'broker/brokerGetter',
             getAsset: 'asset/assetGetter',
+            walletGetter: 'wallet/walletGetter',
         }),
         currentInvestiment(){
             return this.pnl() + parseFloat(this.initialInvestiment)
@@ -180,11 +267,15 @@
             })
             if(total){
                 this.getCount.forEach( (element) => {
-                if(this.categoryFilter==element.category || this.categoryFilter == '' || this.categoryFilter == undefined) {
-                    labels.push(element.name + ' ' + parseFloat((element.total/total)*100).toFixed(2) + '%')    
-                    colors.push(vm.dynamicColors())
-                    datasets.push(element.total)
-                }
+                    //if(this.categoryFilter==element.category || this.categoryFilter == '' || this.categoryFilter == undefined) {
+                    if(
+                        (this.categoryFilter==element.category || this.categoryFilter == '' || this.categoryFilter == undefined) && 
+                        (this.walletFilter==element.wallet || this.walletFilter == '' || this.walletFilter == undefined)
+                    ) {
+                        labels.push(element.name + ' ' + parseFloat((element.total/total)*100).toFixed(2) + '%')    
+                        colors.push(vm.dynamicColors())
+                        datasets.push(element.total)
+                    }
                 })
             }
 
@@ -211,13 +302,23 @@
             })
 
             this.getCount.forEach( (element) => {
-                if(this.categoryFilter==element.category || this.categoryFilter == '' || this.categoryFilter == undefined) {
+                console.log(this.walletFilter)
+                if(
+                    (this.categoryFilter==element.category || this.categoryFilter == '' || this.categoryFilter == undefined) && 
+                    (this.walletFilter==element.wallet || this.walletFilter == '' || this.walletFilter == undefined)
+                ) {
 
                     d.push({
                         asset:{name: element.name} ,
                         perc: parseFloat(parseFloat((element.total/total)*100).toFixed(2)),
                         investiment: element.total,
-                        category: element.category
+                        category: element.category,
+                        wallet: element.wallet,
+                        price: element.price,
+                        amount: element.amount,
+                        mediumPrice: element.total/element.amount,
+                        investimentNow: element.price*element.amount,
+                        pnl: (element.price*element.amount) - element.total
                     }) 
                 }
             })
@@ -246,6 +347,7 @@
             syncCategoryAction: 'category/syncAction',
             syncBrokerAction: 'broker/syncAction',
             syncAssetAction: 'asset/syncAction',
+            syncWalletAction: 'wallet/syncAction',
         }),
         openInsertModal () {
             this.trade = Object.assign({}, this.defaultValues())
