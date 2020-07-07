@@ -10,4 +10,13 @@ export const remove = (data) => http.del(`/trade`, data);
 
 export const update = (data) => http.put(`/trade`, data, data._id);
 
+export const insertImportCEI = (data) => http.post(
+    '/excel', 
+    data, 
+    {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    }
+);
 

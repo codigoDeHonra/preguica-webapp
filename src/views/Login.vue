@@ -3,17 +3,25 @@
         fluid
         fill-height
     >
-        <v-layout
+        <v-row
             flex
-            align-center
-            justify-center
+            align="center"
+            justify="center"
         >
-            <v-flex
-                xs12
-                sm4
+            <v-col
+                xs="12"
+                sm="4"
+                cols="6"
                 elevation-6
             >
-                <v-card class="green darken-4 justify-center">
+                <img src="../assets/preguica.png">
+            </v-col>
+            <v-col
+                xs="12"
+                sm="4"
+                cols="6"
+            >
+                <v-card class="green justify-center">
                     <v-layout
                         row
                         align-center
@@ -29,9 +37,10 @@
                                 <v-text-field
                                     v-model="email"
                                     required
-                                    box
+                                    filled 
                                     prepend-icon="mdi-email"
                                     label="E-mail"
+                                    :rules="emailRules"
                                 />
                                 <v-text-field
                                     v-model="password"
@@ -40,27 +49,44 @@
                                     :rules="senhaRules"
                                     label="Senha"
                                     required
-                                    box
+                                    filled 
                                     prepend-icon="mdi-lock"
                                     @click:append="() => (e1 = !e1)"
                                 />
-                                <v-layout justify-space-between>
-                                    <v-btn
-                                        :class=" { 'green darken-4 white--text' : valid, disabled: !valid }"
-                                        color="blue darken-4"
-                                        dark
-                                        block
-                                        @click="submit()"
+                                <v-card-actions justify-space-between>
+                                    <v-row
+                                        flex
+                                        align="center"
+                                        justify="center"
                                     >
-                                        Entrar
-                                    </v-btn>
-                                </v-layout>
+                                    <v-col cols="12">
+                                        <v-btn
+                                            :disabled="!valid"
+                                            color="success"
+                                            block
+                                            @click="submit()"
+                                        >
+                                            Entrar
+                                        </v-btn>
+                                    </v-col>
+                                    <v-col cols="12">
+                                        <v-btn
+                                            color=" darken-4"
+                                            dark
+                                            block
+                                            :to="{ name:'cadastro'}"
+                                        >
+                                           Cadastrar
+                                        </v-btn>
+                                    </v-col>
+                                    </v-row>
+                                </v-card-actions>
                             </v-form>
                         </div>
                     </v-card-text>
                 </v-card>
-            </v-flex>
-        </v-layout>
+            </v-col>
+        </v-row>
     </v-container>
 </template>
 <script>
@@ -70,11 +96,15 @@ export default {
     name:'Login',
     data() {
         return {
-            valid: true,
+            valid: false,
             e1: 'visibility',
             password: '',
             senhaRules: [
                 v => !!v || 'Preencher Senha!',
+            ],
+            emailRules: [
+                v => !!v || 'Preencher E-mail',
+                v => /.+@.+\..+/.test(v) || 'E-mail precisa ser valido',
             ],
             email: ''
         };

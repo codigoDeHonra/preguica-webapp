@@ -11,7 +11,7 @@
             <v-col
                 cols="12"
             >
-                <v-subheader><h2>Ativos</h2></v-subheader>
+                <v-subheader><h2>Importar CEI</h2></v-subheader>
             </v-col>
             <v-col
                 cols="6"
@@ -30,23 +30,12 @@
                                         filled
                                         item-text="name"
                                         item-value="_id"
-                                        label="Categoria"
+                                        label="Corretora"
                                         v-model="assetItem.category"
                                         return-object
                                     ></v-select>
                                 </v-flex>
-                                <v-text-field
-                                    v-model="assetItem.name"
-                                    filled
-                                    required
-                                    label="Nome"
-                                />
-                                <v-text-field
-                                    v-model="assetItem.price"
-                                    filled
-                                    required
-                                    label="Preço"
-                                />
+                                <v-file-input v-model="file" label="Arquivo"></v-file-input>
                                 <v-layout justify-space-between>
                                     <v-btn
                                         :class=" { 'green darken-4 white--text' : valid, disabled: !valid }"
@@ -124,6 +113,7 @@ export default {
         return {
             valid: true,
             name: '',
+            file: '',
             category: '',
             assetItem: {},
             headers:[
@@ -186,21 +176,13 @@ export default {
             updateAssetAction: 'asset/updateAction',
             syncCategoryAction: 'category/syncAction',
             syncAssetShowAction: 'asset/showAction',
+            insertTradeImportCEIAction: 'dashboard/insertImportCEIAction',
         }),
         submit() {
-            const asset = { 
-                _id: this.assetItem._id, 
-                name: this.assetItem.name, 
-                category: this.assetItem.category, 
-                price: this.assetItem.price 
-            };
+            let formData = new FormData();
 
-            if(this.assetItem._id) {
-                this.updateAssetAction(asset);
-            } else {
-                this.insertAssetAction(asset);
-            }
-
+            formData.append('file', this.file);
+            this.insertTradeImportCEIAction(formData);
         },
         deleteItem (item) {
             const index = this.assetGetter.indexOf(item)

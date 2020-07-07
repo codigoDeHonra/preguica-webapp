@@ -2,6 +2,7 @@ import * as types from './types';
 
 export const state = {
     asset: [],
+    assetItem: {},
 };
 
 export const mutations = {
@@ -17,6 +18,9 @@ export const mutations = {
     },
     [types.SYNC_ASSET](state, data) {
         state.asset = data;
+    },
+    [types.SHOW_ASSET](state, data) {
+        state.assetItem = data;
     },
     [types.UPDATE_ASSET]() {
     },

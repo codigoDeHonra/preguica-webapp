@@ -22,7 +22,6 @@ console.log(rootState.usuario.usuario._id)
 
 export const countAction = ({ commit }) => {
 
-
     trade.count()
         .then((response) => {
             const { data } = response;
@@ -78,3 +77,13 @@ export const removeAllSessionAction = ({ commit }) => {
   commit(types.REMOVE_ALL_SESSION)
 }
 
+export const insertImportCEIAction = ({ commit }, params) => {
+    console.log('insertImportCEIAction', params)
+    trade.insertImportCEI(params)
+        .then(() => {
+            commit(types.UPDATE_CATEGORY, params)
+        })
+        .catch((r)=>{
+            console.log('teste', r);
+        });
+}

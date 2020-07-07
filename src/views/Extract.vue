@@ -1,72 +1,113 @@
 <template>
     <div>
-        <v-container  flud grid-list-md text-xs-center>
-        <v-layout row wrap>
-            <v-flex >
-                <v-card color="" class="">
-                    <v-card-title primary-title>
-                        <div>
-                            <div class="headline">Investimento Inicial</div>
-                            <v-text-field
-                                label="Investimento Inicial"
-                                placeholder="100"
-                               filled 
-                                v-model="initialInvestiment"
-                            ></v-text-field>
+        <v-container  fluid grid-list-md text-xs-center>
+            <v-row>
+                <v-col cols="12" sm="6" md="4">
+                    <h3>Extrato de negociações</h3>
+                </v-col>
+            </v-row>
 
-                        </div>
-                    </v-card-title>
-                </v-card>
-            </v-flex>
-            <v-flex >
-                <v-card color="" class="">
-                    <v-card-title primary-title>
-                        <div>
-                            <div class="headline">Entrada: {{entry.toFixed(2)}}</div>
-                            <v-text-field
-                                label="Entrada Padrão"
-                                placeholder="1000"
-                               filled 
-                                v-model="fixedInvestiment"
-                                append-icon="fas fa-percent"
-                            ></v-text-field>
-                            <v-text-field
-                                label="Payout Padrão"
-                                placeholder="1000"
-                               filled 
-                                v-model="fixedPayout"
-                                append-icon="fas fa-percent"
-                            ></v-text-field>
-                        </div>
-                    </v-card-title>
-                </v-card>
-            </v-flex>
-            <v-flex >
-                <v-card color="" class="">
-                    <v-card-title primary-title>
-                        <div>
-                            <div class="headline">Investimento Atual</div>
-                            <span class="display-3">{{currentInvestiment.toFixed(2)}}</span>
-                        </div>
-                    </v-card-title>
-                </v-card>
-            </v-flex>
-            <v-flex>
-                <v-card :color="(pnl() >= 0) ? 'green lighten-5' : 'red lighten-5'">
-                    <v-card-title primary-title>
-                        <div>
-                            <div class="headline">Ganhos/Perdas</div>
-                            <span class="display-3">{{pnl().toFixed(2)}}</span>
-                        </div>
-                    </v-card-title>
-                </v-card>
-            </v-flex>
-        </v-layout>
+            <v-row>
+                <v-col cols="2" sm="6" md="2">
+                  <v-menu
+                    ref="menu1"
+                    v-model="pickerOpen"
+                    :close-on-content-click="false"
+                    :return-value.sync="beginDate"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="beginDate"
+                        label="Data Inicial"
+                        filled
+                        prepend-icon="mdi-calendar"
+                        readonly
+                        v-on="on"
+                        clearable
+                      />
+                    </template>
+                    <v-date-picker v-model="beginDate" no-title scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="pickerOpen = false">Cancel</v-btn>
+                      <v-btn text color="primary" @click="$refs.menu1.save(beginDate)">OK</v-btn>
+                    </v-date-picker>
+                  </v-menu>
+                </v-col>
 
-        <v-btn color="primary" dark class="mb-2" @click="openInsertModal()">Nova Negociação</v-btn>
-        <v-btn color="" dark class="mb-2" @click="removeTrades()">Apagar tudo</v-btn>
-        <v-btn v-if="false" color="" class="mb-2" @click="insertSession()">Salvar Sessão</v-btn>
-        <v-btn v-if="false" color="" class="mb-2" @click="removeAllSession()">Apagar todas Sessão</v-btn>
+                <v-col cols="2" sm="6" md="2">
+                  <v-menu
+                    ref="menuEndDate"
+                    v-model="menuOpenEndDate"
+                    :close-on-content-click="false"
+                    :return-value.sync="date"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        filled
+                        label="Data Final"
+                        prepend-icon="mdi-calendar"
+                        readonly
+                        v-on="on"
+                        v-model="endDate"
+                      />
+                    </template>
+                    <v-date-picker v-model="endDate" no-title scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="menuOpenEndDate = false">Cancel</v-btn>
+                      <v-btn text color="primary" @click="$refs.menuEndDate.save(date)">OK</v-btn>
+                    </v-date-picker>
+                  </v-menu>
+                </v-col>
+            </v-row>
+
+            <v-row
+                flex
+                align-center
+                justify-center
+            >
+                <v-col cols="4">
+                    <v-select
+                        :items="brokerGetter"
+                        filled
+                        clearable
+                        item-text="name"
+                        item-value="name"
+                        label="Corretora"
+                        v-model="brokerFilter"
+                        prepend-icon="mdi-bank"
+                        />
+                </v-col>
+                <v-col cols="4">
+                    <v-select
+                        :items="walletGetter"
+                        filled
+                        clearable
+                        item-text="name"
+                        item-value="name"
+                        label="Carteira"
+                        v-model="walletFilter"
+                        prepend-icon="mdi-wallet"
+                    />
+                </v-col>
+                <v-col cols="4">
+                    <v-select
+                        :items="getCategory"
+                        clearable
+                        filled
+                        item-text="name"
+                        prepend-icon="mdi-folder"
+                        item-value="name"
+                        label="Categoria"
+                        v-model="categoryFilter"
+                    />
+                </v-col>
+            </v-row>
 
         <v-dialog v-model="dialog" max-width="500px">
             <v-card>
@@ -165,6 +206,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
         <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
@@ -175,116 +217,21 @@
         />
 
         <extract-table 
-            :items="getDashboard.trades"
+            :items="tradesFiltered"
             :search="search"
             @update-trade="openUpdateModal"
         />
-        <!--v-data-table
-            :headers="headers"
-            :items="getDashboard.trades"
-            class="elevation-1"
-            :must-sort="true"
-            :search="search"
-        >
-        <template  v-slot:item="{ item, index }">
-                <tr >
-                    <td class="text-xs-left">{{ index +1}}</td>
-                    <td class="text-xs-left">{{ item.date | dateFormat}}</td>
-                    <td class="text-xs-left">{{ item.assetObj.name }}</td>
-                    <td class="text-xs-right">{{ item.investiment }}</td>
-                    <td class="text-xs-right">{{ item.payout }}</td>
-                    <td :class="[item.payout > 0 ? 'green': 'red', 'lighten-5 justify-center']">
-                        {{ total(item).toFixed(2) }}
-                    </td>
-                    <td class="justify-center layout px-0">
-                        <v-icon
-                            small
-                            class="mr-2"
-                            @click="openUpdateModal(item)"
-                        >
-                            mdi-pencil
-                        </v-icon>
-                        <v-icon
-                            small
-                            @click="deleteItem(item)"
-                        >
-                            mdi-delete
-                        </v-icon>
-                    </td>
-                </tr>
-            </template>
-        </v-data-table-->
-
-        <v-tabs
-            v-if="false"
-            v-model="tabActive"
-            color="cyan"
+        <v-btn
             dark
-            slider-color="yellow"
+            fab
+            bottom 
+            fixed
+            right
+            color="green"
+            @click="dialog = true"
         >
-          <v-tab
-                v-for="(n, index) in getDashboard.sessions"
-                :key="index"
-                ripple
-          >
-            Item {{ index }}
-
-          </v-tab>
-              <v-tab-item
-                v-for="(n, index) in getDashboard.sessions"
-                :key="index"
-              >
-            <v-card flat>
-
-                <v-card color="" class="">
-                    <v-card-title primary-title>
-                        <div>
-                            <div class="headline">Investimento Inicial {{n.initialInvestiment}}</div>
-                        </div>
-                    </v-card-title>
-                </v-card>
-
-                <v-data-table
-                    :headers="headers"
-                    :items="n.trades"
-                    class="elevation-1"
-                    :must-sort="true"
-                    :rows-per-page="25"
-                >
-                    <template  v-slot:item="{ item, index }">
-                        <tr :class="[item.payout > 0 ? 'green': 'red', 'accent-1']">
-                            <td class="text-xs-left">{{ index +1}} {{item}}</td>
-                            <td class="text-xs-left">{{ item.date | dateFormat}}</td>
-                            <td class="text-xs-left">{{ item.asset.name }}</td>
-                            <td class="text-xs-right">{{ item.investiment }}</td>
-                            <td class="text-xs-right">{{ item.payout }}</td>
-                            <td class="justify-center ">{{ total(item).toFixed(2) }}</td>
-                            <td class="justify-center layout px-0">
-                                <v-btn>
-                                    <v-icon
-                                        small
-                                        class="mr-2"
-                                        @click="openUpdateModal(item)"
-                                    >
-                                        mdi-pencil
-                                    </v-icon>
-                                </v-btn>
-                                <v-btn>
-                                    <v-icon
-                                        small
-                                        @click="deleteItem(item)"
-                                    >
-                                        mdi-delete
-                                    </v-icon>
-                                </v-btn>
-                            </td>
-                        </tr>
-                    </template>
-                </v-data-table>
-            </v-card>
-              </v-tab-item>
-         </v-tabs>
-
+            <v-icon>mdi-plus</v-icon>
+        </v-btn>
         </v-container>
     </div>
 </template>
@@ -295,14 +242,20 @@
   import vue from 'vue';
   import ExtractTable from '../components/extract/Table';
 
-
   export default {
-    name: 'Dashboard',
+    name: 'Extract',
       components:{
           ExtractTable
       },
     data(){
       return {
+          endDate: '',
+          beginDate: null,
+          menuOpenEndDate: false,
+          categoryFilter: '',
+          brokerFilter: '',
+          walletFilter: '',
+          pickerOpen: false,
           search: '',
           fixedPayout: 0.0,
           fixedInvestiment: 2,
@@ -310,42 +263,6 @@
           dialog: false,
           modalUpdate: false,
           tabActive: null,
-          headers:[
-              {
-                  text: '#',
-                  sortable: false,
-                  align: 'left'
-              },
-              {
-                  text: 'Data',
-                  value: 'date',
-                  sortable: true
-              },
-              {
-                  text: 'Asset',
-                  value: 'asset.name',
-                  align: 'left',
-                  sortable: false
-              },
-              {
-                  text: 'Investimento',
-                  value: 'invesment',
-                  align: 'right',
-                  sortable: false
-              },
-              {
-                  text: 'payout',
-                  value: 'payout',
-                  align: 'right',
-                  sortable: false
-              },
-              {
-                  text: 'Ganho/Perda',
-                  value: 'total',
-                  align: 'center',
-                  sortable: false
-              },
-          ],
           editedIndex: -1,
           trade: {
               date: new Date().toISOString().substr(0, 10),
@@ -365,7 +282,6 @@
               broker: '',
               amount: 0
           },
-          pairs:['EUR/USD', 'USD/CHF', 'AUD/CAD', 'USD/JPY', 'GBP/USD'],
           date: new Date().toISOString().substr(0, 10),
           menu: false,
           modal: false,
@@ -383,6 +299,7 @@
       await this.syncCategoryAction()
       await this.syncBrokerAction()
       await this.syncAssetAction()
+      await this.syncWalletAction()
     },
     computed:{
         ...mapGetters({
@@ -391,6 +308,7 @@
             getCategory: 'category/categoryGetter',
             brokerGetter: 'broker/brokerGetter',
             getAsset: 'asset/assetGetter',
+            walletGetter: 'wallet/walletGetter',
         }),
         currentInvestiment(){
             return this.pnl() + parseFloat(this.initialInvestiment)
@@ -400,6 +318,53 @@
         },
         computedDateFormatted () {
             return this.formatDate(this.date)
+        },
+        tradesFiltered() {
+            let d = [] 
+            let total = 0
+
+            this.getDashboard.trades.forEach(function (element){
+              total += element.total
+            })
+
+            this.getDashboard.trades.forEach( (element) => {
+                //console.log( moment(this.beginDate).isAfter(element.date))
+                if(
+                    (this.categoryFilter==element.asset.category.name || this.categoryFilter == '' || this.categoryFilter == undefined) &&
+                    (this.walletFilter==element.wallet.name || this.walletFilter == '' || this.walletFilter == undefined) &&
+                    (this.brokerFilter==element.broker.name || this.brokerFilter == '' || this.brokerFilter == undefined) &&
+                    (moment(element.date).isSameOrAfter(this.beginDate) || this.beginDate == '' || this.beginDate == undefined) &&
+                    (moment(element.date).isSameOrBefore(this.endDate) || this.endDate == '' || this.endDate == undefined)
+                ) {
+                    d.push({
+                        assetObj:element.assetObj ,
+                        asset:element.asset ,
+                        broker:element.broker,
+                        perc: parseFloat(parseFloat((element.total/total)*100).toFixed(2)),
+                        /*investiment: element.total,*/
+                        category: element.category,
+                        wallet: element.wallet,
+                        price: element.price,
+
+                        _id: element._id,
+                        date: element.date,
+                        investiment:element.investiment,
+                        pair:element.pair,
+                        payout:element.payout,
+                        usuarioId:element.usuarioId
+                    }) 
+
+
+
+
+                }
+            })
+
+            if(d.length > 0 ){
+                return d 
+            } else {
+                return [] 
+            }
         }
     },
     methods:{
@@ -414,6 +379,7 @@
             syncCategoryAction: 'category/syncAction',
             syncBrokerAction: 'broker/syncAction',
             syncAssetAction: 'asset/syncAction',
+            syncWalletAction: 'wallet/syncAction',
         }),
         openInsertModal () {
             this.trade = Object.assign({}, this.defaultValues())

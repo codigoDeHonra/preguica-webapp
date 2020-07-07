@@ -1,5 +1,5 @@
 import * as types from './types';
-import * as wallet from '@/api/wallet'
+import * as study from '@/api/study'
 //import router from '../../router'
 
 // export const  setUserLoginAction = ({ commit }, params) => {
@@ -29,10 +29,10 @@ import * as wallet from '@/api/wallet'
 
 export const  insertAction = ({ commit }, params) => {
 
-    wallet.insert(params)
+    study.insert(params)
         .then((response) => {
             const { data } = response
-            commit(types.INSERT_WALLET, data)
+            commit(types.INSERT_STUDY, data.study)
             commit('noticias/SET_DADOS', {
                 ativo: true,
                 color: 'green',
@@ -55,26 +55,27 @@ export const  insertAction = ({ commit }, params) => {
 // };
 
 export const syncAction = ({ commit }, params) => {
-    wallet.sync(params)
+    study.sync(params)
         .then((response) => {
-            commit(types.SYNC_WALLET, response.data);
+            console.log('syncccc', types)
+            commit(types.SYNC_STUDY, response.data);
         })
-        .catch(()=> { })
+        .catch((e)=> { console.log(e)})
 };
 
-export const syncCountAction = ({ commit }, params) => {
-    wallet.syncCount(params)
+export const showAction = ({ commit }, params) => {
+   console.log(params) 
+    study.show(params)
         .then((response) => {
-            //console.log('action', response.data)
-            commit(types.SYNC_WALLET_COUNT, response.data);
+            commit(types.SHOW_STUDY, response.data);
         })
         .catch(()=> { })
 };
 
 export const  removeAction = ({ commit }, params) => {
-    wallet.remove(params._id)
+    study.remove(params._id)
         .then(() => {
-            commit(types.REMOVE_WALLET);
+            commit(types.REMOVE_STUDY);
         })
         .catch(()=> { })
 
@@ -82,10 +83,10 @@ export const  removeAction = ({ commit }, params) => {
 
 export const  updateAction = ({ commit }, params) => {
 
-    wallet.update(params)
+    study.update(params)
         .then((response) => {
             const { data } = response
-            commit(types.UPDATE_WALLET, data)
+            commit(types.UPDATE_STUDY, data)
             commit('noticias/SET_DADOS', {
                 ativo: true,
                 color: 'green',

@@ -8,10 +8,8 @@
             align-center
             justify-center
         >
-            <v-col
-                cols="12"
-            >
-            <v-subheader><h3>Configuração das Corretoras</h3></v-subheader>
+            <v-col cols="12">
+                <v-subheader><h3>Configuração do Perfil</h3></v-subheader>
             </v-col>
             <v-col
                 cols="6"
@@ -19,17 +17,18 @@
                 <v-card class="green darken-4 justify-center">
                     <v-card-text class="pt-4 white">
                         <div>
-                            <h3>Corretora: {{ this.brokerItem.name }}</h3>
+                            <h3>Perfil: {{ this.profileItem.name }}</h3>
                             <v-form
                                 ref="form"
                                 v-model="valid"
                             >
                                 <v-text-field
-                                    v-model="brokerItem.name"
+                                    v-model="profileItem.name"
                                     required
                                    filled 
                                     label="Nome"
                                 />
+                                <v-switch v-model="profileItem.default" label="Perfil Padrão"></v-switch>
                                 <v-layout justify-space-between>
                                     <v-btn
                                         :class=" { 'green darken-4 white--text' : valid, disabled: !valid }"
@@ -37,16 +36,13 @@
                                         dark
                                         @click="submit()"
                                     >
-                                     {{ this.brokerItem._id ? 'Atualizar': 'Cadastrar' }}
+                                     {{ this.profileItem._id ? 'Atualizar': 'Cadastrar' }}
                                     </v-btn>
-                                    <v-btn
-                                        color="red"
-                                        dark
+                                    <cancel-btn 
                                         text
+                                        :to="{ name: 'login'}" 
                                         @click="reset()"
-                                    >
-                                    Cancelar
-                                    </v-btn>
+                                    />
                                 </v-layout>
                             </v-form>
                         </div>
@@ -58,7 +54,7 @@
             >
                 <v-data-table
                     :headers="headers"
-                    :items="brokerGetter"
+                    :items="profileGetter"
                     class="elevation-1"
                     :must-sort="true"
                 >
@@ -86,9 +82,13 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import CancelBtn from '../components/app/CancelBtn';
 
 export default {
-    name:'Broker',
+    name:'Profile',
+    components:{
+        CancelBtn
+    },
     data() {
         return {
             valid: true,
@@ -107,15 +107,20 @@ export default {
                       align: 'right'
                   },
             ],
-            brokerItem: {}
+            profileItem: {
+                name: '',
+                default: false
+            }
         };
     },
     created() {
         this.syncBrokerAction()
+        this.syncProfileAction()
     },
     computed: {
         ...mapGetters({
             brokerGetter: 'broker/brokerGetter',
+            profileGetter: 'profile/profileGetter',
         }),
     },
     watch: {
@@ -131,17 +136,20 @@ export default {
             syncBrokerAction: 'broker/syncAction',
             removeAction: 'broker/removeAction',
             updateBrokerAction: 'broker/updateAction',
+            insertProfileAction: 'profile/insertAction',
+            updateProfileAction: 'profile/updateAction',
+            syncProfileAction: 'profile/syncAction',
         }),
         submit() {
             const broker = { 
-                _id: this.brokerItem._id, 
-                name: this.brokerItem.name, 
+                _id: this.profileItem._id, 
+                name: this.profileItem.name, 
             };
 
-            if(this.brokerItem._id) {
-                this.updateBrokerAction(broker);
+            if(this.profileItem._id) {
+                this.updateProfileAction(broker);
             } else {
-                this.insertBrokerAction(broker);
+                this.insertProfileAction(broker);
             }
 
         },
@@ -153,10 +161,10 @@ export default {
         },
         openUpdateModal (item) {
             const index = this.brokerGetter.indexOf(item)
-            this.brokerItem = this.brokerGetter[index]
+            this.profileItem = this.brokerGetter[index]
         },
         reset () {
-            this.brokerItem = {} 
+            this.profileItem = {} 
         },
     }
 }

@@ -1,0 +1,6 @@
+export const SYNC_PROFILE = 'SYNC_PROFILE';
+export const SET_USUARIO = 'SET_USUARIO';
+export const REMOVE_PROFILE = 'REMOVE_PROFILE';
+export const INSERT_PROFILE = 'INSERT_PROFILE';
+export const SHOW_PROFILE = 'SHOW_PROFILE';
+

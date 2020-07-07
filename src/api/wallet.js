@@ -1,8 +1,8 @@
 import * as http from './http';
 
-export const sync = (data) => http.get('/wallet', data);
+export const sync = (data) => http.get(`/wallet/profile/${data}`);
 
-export const syncCount = (data) => http.get('/wallet/count', data);
+export const syncCount = (data) => http.get(`/wallet/count/profile/${data}`);
 
 export const insert = (data) => http.post('/wallet', data);
 

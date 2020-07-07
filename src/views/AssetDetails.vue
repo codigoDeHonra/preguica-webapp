@@ -11,42 +11,63 @@
             <v-col
                 cols="12"
             >
-                <v-subheader><h2>Ativos</h2></v-subheader>
+            <v-subheader><h2>Ativo: {{ $route.params.code}}</h2></v-subheader>
             </v-col>
-            <v-col
-                cols="6"
-            >
-                <v-card class="green darken-4 justify-center">
-                    <v-card-text class="pt-4 white">
-                        <div>
-                            <!--h3>Asset: {{ this.assetItem.name }}</h3-->
+            <v-col cols="6">
+                <v-card>
+                    <v-card-text>
+                        nome: {{getAssetItem.name}}
+                        preço: {{getAssetItem.price}}
+                        categoria: {{getAssetItem.category.name}}
+                        <v-btn target="blank" :href="`https://statusinvest.com.br/acoes/${getAssetItem.name}`">
+                            StatusInvest
+                        </v-btn>
+                        <v-btn 
+                            target="blank" 
+                            :href="`https://www.fundamentus.com.br/detalhes.php?papel=${getAssetItem.name}`">
+                            Fundamentus
+                        </v-btn>
+                        <v-btn 
+                            target="blank" 
+                            :href="`https://www.fundsexplorer.com.br/funds/${getAssetItem.name}`">
+                            Fundsexplorer
+                        </v-btn>
+                        <v-btn 
+                            target="blank" 
+                            :href="`https://www.sunoresearch.com.br/acoes/${getAssetItem.name}`">
+                           Suno 
+                        </v-btn>
+                        <v-btn 
+                            target="blank" 
+                            :href="`https://www.google.com/search?q=${getAssetItem.name}&tbm=fin`">
+                           Google 
+                        </v-btn>
+                        <v-btn 
+                            target="blank" 
+                            :href="`https://www.tradingview.com/symbols/BMFBOVESPA-${getAssetItem.name}`">
+                          Tradingview 
+                        </v-btn>
+                       
+                    </v-card-text>
+                </v-card>
+            </v-col>
+            <v-col cols="12">
                             <v-form
                                 ref="form"
                                 v-model="valid"
                             >
-                                <v-flex xs12 >
-                                    <v-select
-                                        :items="getCategory"
-                                        filled
-                                        item-text="name"
-                                        item-value="_id"
-                                        label="Categoria"
-                                        v-model="assetItem.category"
-                                        return-object
-                                    ></v-select>
-                                </v-flex>
                                 <v-text-field
-                                    v-model="assetItem.name"
+                                    v-model="studyItem.name"
                                     filled
                                     required
                                     label="Nome"
                                 />
-                                <v-text-field
-                                    v-model="assetItem.price"
-                                    filled
-                                    required
-                                    label="Preço"
-                                />
+                                    <v-textarea 
+                                        v-model="studyItem.description"
+                                        filled
+                                        label="Descrição"
+                                    >
+                                    </v-textarea>
                                 <v-layout justify-space-between>
                                     <v-btn
                                         :class=" { 'green darken-4 white--text' : valid, disabled: !valid }"
@@ -54,7 +75,7 @@
                                         dark
                                         @click="submit()"
                                     >
-                                     {{ this.assetItem._id ? 'Atualizar': 'Cadastrar' }}
+                                     {{ this.studyItem._id ? 'Atualizar': 'Cadastrar' }}
                                     </v-btn>
                                     <v-btn
                                         :class=" { 'green darken-4 white--text' : valid, disabled: !valid }"
@@ -66,23 +87,18 @@
                                     </v-btn>
                                 </v-layout>
                             </v-form>
-                        </div>
-                    </v-card-text>
-                </v-card>
             </v-col>
-            <v-col cols="6">
+            <v-col cols="12">
                 <v-data-table
                     :headers="headers"
-                    :items="assetGetter"
+                    :items="getStudy"
                     class="elevation-1"
                     :must-sort="true"
                 >
                 <template v-slot:item="{ item }">
                         <tr >
                             <td class="text-xs-left">{{ item.name }}</td>
-                            <td class="text-xs-left">{{ item.amount }}</td>
-                            <td class="text-xs-left">{{ item.price }}</td>
-                            <td class="text-xs-left">{{ item.category !== null ? item.category.name : '-' }}</td>
+                            <td class="text-xs-left">{{ item.description }}</td>
                             <td class="justify-center layout px-0">
                                 <v-icon
                                     small
@@ -100,9 +116,9 @@
                                 <v-btn
                                     text
                                     :to="{
-                                        name: 'asset-details',
-                                        params: { code: item.name} 
-                                        }">
+                                        path: '/ativo/:code/detalhes',
+                                        params: {code: item.name} 
+                                    }">
                                     <v-icon small >
                                         mdi-eye
                                     </v-icon>
@@ -111,7 +127,7 @@
                         </tr>
                     </template>
                 </v-data-table>
-            </v-col>
+        </v-col>
         </v-row>
     </v-container>
 </template>
@@ -125,22 +141,9 @@ export default {
             valid: true,
             name: '',
             category: '',
-            assetItem: {},
             headers:[
                   {
                       text: 'Nome',
-                      value: 'name',
-                      sortable: true,
-                      align: 'left'
-                  },
-                {
-                      text: 'Quantidade',
-                      value: 'name',
-                      sortable: true,
-                      align: 'left'
-                  },
-                  {
-                      text: 'Preço',
                       value: 'name',
                       sortable: true,
                       align: 'left'
@@ -158,17 +161,21 @@ export default {
                       align: 'center'
                   },
             ],
+            studyItem: {}
         };
     },
     async created() {
       await this.syncAssetAction()
-      //await this.syncAssetShowAction()
       await this.syncCategoryAction()
+      await this.syncAssetShowAction({ code: this.$route.params.code })
+      await this.syncStudyAction({ code: this.$route.params.code })
     },
     computed: {
         ...mapGetters({
             assetGetter: 'asset/assetGetter',
             getCategory: 'category/categoryGetter',
+            getAssetItem: 'asset/assetItemGetter',
+            getStudy: 'study/studyGetter',
         }),
     },
     watch: {
@@ -182,23 +189,26 @@ export default {
         ...mapActions({
             insertAssetAction: 'asset/insertAction',
             syncAssetAction: 'asset/syncAction',
+            syncAssetShowAction: 'asset/showAction',
             removeAction: 'asset/removeAction',
             updateAssetAction: 'asset/updateAction',
             syncCategoryAction: 'category/syncAction',
-            syncAssetShowAction: 'asset/showAction',
+            syncStudyAction: 'study/syncAction',
+            insertStudyAction: 'study/insertAction',
+            updateStudyAction: 'study/updateAction',
         }),
         submit() {
-            const asset = { 
-                _id: this.assetItem._id, 
-                name: this.assetItem.name, 
-                category: this.assetItem.category, 
-                price: this.assetItem.price 
+            const study = { 
+                "name": this.studyItem.name,
+                "description": this.studyItem.description,
+                "asset_code":this.$route.params.code ,
+                //"asset_id": this.getAssetItem[0]._id
             };
 
-            if(this.assetItem._id) {
-                this.updateAssetAction(asset);
+            if(this.studyItem._id) {
+                this.updateStudyAction(study);
             } else {
-                this.insertAssetAction(asset);
+                this.insertStudyAction(study);
             }
 
         },
@@ -210,10 +220,10 @@ export default {
         },
         openUpdateModal (item) {
             const index = this.assetGetter.indexOf(item)
-            this.assetItem = this.assetGetter[index]
+            this.studyItem = this.assetGetter[index]
         },
         reset () {
-            this.assetItem = {} 
+            this.studyItem = {} 
         },
     }
 }
