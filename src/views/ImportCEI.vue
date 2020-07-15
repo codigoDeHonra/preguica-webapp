@@ -26,13 +26,12 @@
                             >
                                 <v-flex xs12 >
                                     <v-select
-                                        :items="getCategory"
+                                        :items="brokerGetter"
                                         filled
                                         item-text="name"
                                         item-value="_id"
                                         label="Corretora"
-                                        v-model="assetItem.category"
-                                        return-object
+                                        v-model="broker"
                                     ></v-select>
                                 </v-flex>
                                 <v-file-input v-model="file" label="Arquivo"></v-file-input>
@@ -114,6 +113,7 @@ export default {
             valid: true,
             name: '',
             file: '',
+            broker: '',
             category: '',
             assetItem: {},
             headers:[
@@ -159,6 +159,7 @@ export default {
         ...mapGetters({
             assetGetter: 'asset/assetGetter',
             getCategory: 'category/categoryGetter',
+            brokerGetter: 'broker/brokerGetter',
         }),
     },
     watch: {
@@ -182,6 +183,7 @@ export default {
             let formData = new FormData();
 
             formData.append('file', this.file);
+            formData.append('broker', this.broker);
             this.insertTradeImportCEIAction(formData);
         },
         deleteItem (item) {

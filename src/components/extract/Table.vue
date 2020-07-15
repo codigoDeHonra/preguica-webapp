@@ -16,6 +16,7 @@
                     <td class="text-xs-left">{{ item.broker.name }}</td>
                     <td class="text-xs-left">{{ item.asset.category.name }}</td>
                     <td class="text-right">{{ item.investiment | money }}</td>
+                    <td class="text-xs-left">{{ item.origin }}</td>
                     <!--td class="text-xs-right">{{ item.payout }}</td>
                     <td :class="[item.payout > 0 ? 'green': 'red', 'lighten-5 justify-center']">
                         {{ total(item).toFixed(2) }}
@@ -93,6 +94,12 @@
               },
               {
                   text: 'Investimento',
+                  value: 'invesment',
+                  align: 'right',
+                  sortable: true 
+              },
+              {
+                  text: 'Origem',
                   value: 'invesment',
                   align: 'right',
                   sortable: true 

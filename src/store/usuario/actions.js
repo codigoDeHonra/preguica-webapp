@@ -26,7 +26,7 @@ export const  setUserLoginAction = ({ commit, dispatch }, params) => {
                 { root: true }
             )
 
-            router.push('/minhas-carteiras')
+            router.push('/meus-perfis')
         })
         .catch((r)=> {
             console.log('teste', r)

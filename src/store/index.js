@@ -11,6 +11,7 @@ import asset from './asset/index'
 import wallet from './wallet/index'
 import study from './study/index'
 import profile from './profile/index'
+import company from './company/index'
 
 Vue.use(Vuex)
 
@@ -25,7 +26,8 @@ export default new Vuex.Store({
         asset,
         wallet,
         study,
-        profile
+        profile,
+        company
     },
     debug: true,
 })

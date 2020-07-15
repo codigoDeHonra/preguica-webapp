@@ -11,7 +11,7 @@
             <v-col
                 cols="12"
             >
-                <v-subheader><h2>Ativos</h2></v-subheader>
+                <v-subheader><h2>Compania</h2></v-subheader>
             </v-col>
             <v-col
                 cols="6"
@@ -35,21 +35,12 @@
                                         return-object
                                     ></v-select>
                                 </v-flex>
-
-                                <v-autocomplete
-                                    filled
-                                    :items="getCompanyAssets"
-                                    label="Ativo"
-                                    v-model="assetItem.name"
-                                    return-object
-                                ></v-autocomplete>
-
-                                <!--v-text-field
+                                <v-text-field
                                     v-model="assetItem.name"
                                     filled
                                     required
                                     label="Nome"
-                                /-->
+                                />
                                 <v-text-field
                                     v-model="assetItem.price"
                                     filled
@@ -82,16 +73,26 @@
             <v-col cols="6">
                 <v-data-table
                     :headers="headers"
-                    :items="assetGetter"
+                    :items="companiesGetter"
                     class="elevation-1"
                     :must-sort="true"
                 >
                 <template v-slot:item="{ item }">
                         <tr >
                             <td class="text-xs-left">{{ item.name }}</td>
-                            <td class="text-xs-left">{{ item.amount }}</td>
+                            <td class="text-xs-left">
+                                <template 
+                                   v-for="(codigo, index) in item.codigos"
+                                >
+                                   <v-chip
+                                    :key="index"
+                                       class="ma-2"
+                                   >
+                                       {{ codigo }}
+                                   </v-chip>
+                               </template>
+                            </td>
                             <td class="text-xs-left">{{ item.price }}</td>
-                            <td class="text-xs-left">{{ item.category !== null ? item.category.name : '-' }}</td>
                             <td class="justify-center layout px-0">
                                 <v-icon
                                     small
@@ -128,7 +129,7 @@
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-    name:'Asset',
+    name:'Company',
     data() {
         return {
             valid: true,
@@ -143,21 +144,9 @@ export default {
                       align: 'left'
                   },
                 {
-                      text: 'Quantidade',
+                      text: 'Ações',
                       value: 'name',
                       sortable: true,
-                      align: 'left'
-                  },
-                  {
-                      text: 'Preço',
-                      value: 'name',
-                      sortable: true,
-                      align: 'left'
-                  },
-                  {
-                      text: 'Categoria',
-                      value: 'category',
-                      sortable: false,
                       align: 'left'
                   },
                   {
@@ -171,15 +160,13 @@ export default {
     },
     async created() {
       await this.syncAssetAction()
-      //await this.syncAssetShowAction()
       await this.syncCategoryAction()
-      await this.syncCompanyAssetsAction()
+      await this.syncCompanyAction()
     },
     computed: {
         ...mapGetters({
-            assetGetter: 'asset/assetGetter',
+            companiesGetter: 'company/companiesGetter',
             getCategory: 'category/categoryGetter',
-            getCompanyAssets: 'company/companyAssetsGetter',
         }),
     },
     watch: {
@@ -197,7 +184,7 @@ export default {
             updateAssetAction: 'asset/updateAction',
             syncCategoryAction: 'category/syncAction',
             syncAssetShowAction: 'asset/showAction',
-            syncCompanyAssetsAction: 'company/syncCompanyAssetsAction',
+            syncCompanyAction: 'company/syncAction',
         }),
         submit() {
             const asset = { 
@@ -216,7 +203,6 @@ export default {
         },
         deleteItem (item) {
             const index = this.assetGetter.indexOf(item)
-            // console.log(item)
             item.index = index
             confirm('Tem certeza?') && this.removeAction(item)
         },

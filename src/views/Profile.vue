@@ -115,12 +115,13 @@ export default {
     },
     created() {
         this.syncBrokerAction()
-        this.syncProfileAction()
+        this.syncProfileAction(this.userGetter._id)
     },
     computed: {
         ...mapGetters({
             brokerGetter: 'broker/brokerGetter',
             profileGetter: 'profile/profileGetter',
+            userGetter: 'usuario/usuarioGetter',
         }),
     },
     watch: {

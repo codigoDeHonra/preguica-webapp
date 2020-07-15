@@ -112,6 +112,11 @@ const routes = [
         path: '/config/importar',
       name: 'config-importar',
       component: () => import(/* webpackChunkName: "MyAssets" */ '../views/ImportCEI.vue')
+    },
+    {
+      path: '/config/company',
+      name: 'config-company',
+      component: () => import(/* webpackChunkName: "MyAssets" */ '../views/Company.vue')
     }
   ]
 

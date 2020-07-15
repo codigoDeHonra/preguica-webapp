@@ -14,8 +14,9 @@ export const insertImportCEI = (data) => http.post(
     '/excel', 
     data, 
     {
-        headers: {
-            'Content-Type': 'multipart/form-data'
+        headers:  { 
+            'Content-Type': 'multipart/form-data',
+            'Authorization' : JSON.parse(localStorage.getItem('user')).token
         }
     }
 );

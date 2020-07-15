@@ -80,6 +80,11 @@
                    Categoria 
                 </v-list-tile-title>
               </v-list-item>
+              <v-list-item @click="$router.push('/config/company')">
+                <v-list-tile-title >
+                  Company 
+                </v-list-tile-title>
+              </v-list-item>
               <v-list-item @click="$router.push('/ativo')">
                 <v-list-tile-title >
                    <v-icon>mdi-cash</v-icon>
