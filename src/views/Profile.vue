@@ -135,7 +135,7 @@ export default {
         ...mapActions({
             insertBrokerAction: 'broker/insertAction',
             syncBrokerAction: 'broker/syncAction',
-            removeAction: 'broker/removeAction',
+            removeAction: 'profile/removeAction',
             updateBrokerAction: 'broker/updateAction',
             insertProfileAction: 'profile/insertAction',
             updateProfileAction: 'profile/updateAction',
@@ -155,7 +155,7 @@ export default {
 
         },
         deleteItem (item) {
-            const index = this.brokerGetter.indexOf(item)
+            const index = this.profileGetter.indexOf(item)
             // console.log(item)
             item.index = index
             confirm('Tem certeza?') && this.removeAction(item)

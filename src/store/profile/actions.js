@@ -88,10 +88,9 @@ export const showAction = ({ commit }, params) => {
 export const  removeAction = ({ commit }, params) => {
     study.remove(params._id)
         .then(() => {
-            commit(types.REMOVE_STUDY);
+            commit(types.REMOVE_PROFILE);
         })
         .catch(()=> { })
-
 };
 
 export const  updateAction = ({ commit }, params) => {
@@ -99,7 +98,7 @@ export const  updateAction = ({ commit }, params) => {
     study.update(params)
         .then((response) => {
             const { data } = response
-            commit(types.UPDATE_STUDY, data)
+            commit(types.UPDATE_PROFILE, data)
             commit('noticias/SET_DADOS', {
                 ativo: true,
                 color: 'green',

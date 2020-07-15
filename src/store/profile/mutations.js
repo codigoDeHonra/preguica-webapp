@@ -2,15 +2,13 @@ import * as types from './types';
 
 export const state = {
     profiles: [],
-    studyItem: {}
 };
 
 export const mutations = {
     [types.INSERT_PROFILE](state, params) {
         state.asset.push(params)
     },
-    [types.REMOVE_PROFILE](state) {
-        state.usuario = {}
+    [types.REMOVE_PROFILE]() {
     },
     [types.SYNC_PROFILE](state, data) {
         state.profiles = data;
