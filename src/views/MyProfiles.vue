@@ -20,9 +20,19 @@
                     class="elevation-1"
                     :must-sort="true"
                 >
-                <template  v-slot:item="{ item }">
-                        <tr >
+                    <template v-slot:item="{ item }">
+                        <tr>
                             <td class="text-xs-left">{{ item.name }}</td>
+                            <td class="text-right px-0">
+                                <v-btn :to="{ 
+                                    name: 'my-wallets', 
+                                    params: { profileId: item._id } }"
+                                >
+                                    <v-icon>
+                                        mdi-eye
+                                    </v-icon>
+                                </v-btn>
+                            </td>
                         </tr>
                     </template>
                 </v-data-table>

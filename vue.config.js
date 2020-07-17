@@ -6,4 +6,10 @@ module.exports = {
       ]
     }
   },
+  devServer: {
+    https: true,
+    allowedHosts: [
+      'app.xn--preguia-zxa.money',
+    ]
+  }
 }

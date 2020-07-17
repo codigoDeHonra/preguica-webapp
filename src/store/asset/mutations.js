@@ -3,6 +3,7 @@ import * as types from './types';
 export const state = {
     asset: [],
     assetItem: {},
+    breadcrumbs:[]
 };
 
 export const mutations = {

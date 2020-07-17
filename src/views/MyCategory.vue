@@ -60,7 +60,7 @@
   import Bar from '../components/Pie'
 
   export default {
-    name: 'MyWallet',
+    name: 'MyCategory',
       components:{
           Bar
       },

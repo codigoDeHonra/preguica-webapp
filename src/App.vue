@@ -7,7 +7,12 @@
           dark
       >
           <v-toolbar-title>
-              <div class="font-weight-thin">{{app}} <br><span class="font-weight-bold">Perfil: Teste</span></div>
+              <div class="font-weight-thin">{{app}} <br>
+                  <span 
+                      class="font-weight-bold"
+                      @click="$router.push('/meus-perfis')"
+                  >Perfil: Teste</span>
+              </div>
           </v-toolbar-title>
 
           <v-spacer></v-spacer>
@@ -128,7 +133,8 @@
     <v-content>
         <v-container
             fluid
-        >
+        > 
+            <v-breadcrumbs :items="breadcrumbsGetter"></v-breadcrumbs>
             <v-fade-transition mode="out-in">
                 <router-view/>
             </v-fade-transition>
@@ -170,7 +176,6 @@ export default {
   name: 'App',
   data () {
     return { 
-       // usuario: {}
         snackbar: false,
         app: process.env.VUE_APP_NAME,
     }
@@ -179,6 +184,14 @@ export default {
       await this.syncUsuarioAction()
       await this.syncCategoryAction()
       await this.syncCategoryByWalletAction(this.$route.params.id)
+      await this.breadcrumbInsertAction({
+                disabled: false, 
+                exact: false,
+                href: '/teste',
+                link: true,
+                text: 'Meus Perfis',
+                to: '/meus-perfis' 
+            })
     },
     computed: {
         ...mapGetters({
@@ -186,6 +199,7 @@ export default {
             getSnackbar: 'noticias/getDados',
             getCategory: 'category/categoryGetter',
             getCategoryByWallet: 'category/byWalletGetter',
+            breadcrumbsGetter: 'global/breadcrumbsGetter',
         }),
         usuario(){
             return this.getUsuario && Object.keys(this.getUsuario).length > 0 ? this.getUsuario : {};
@@ -198,6 +212,7 @@ export default {
             setSnackbar: 'noticias/setDados',
             syncCategoryAction: 'category/syncAction',
             syncCategoryByWalletAction: 'category/syncByWalletAction',
+            breadcrumbInsertAction: 'global/breadcrumbInsertAction',
         }),
         logoff(){
             this.removeUsuarioAction()

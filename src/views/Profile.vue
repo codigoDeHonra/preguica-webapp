@@ -61,6 +61,7 @@
                 <template  v-slot:item="{ item }">
                         <tr >
                             <td class="text-xs-left">{{ item.name }}</td>
+                            <td class="text-xs-left">{{ item.default }}</td>
                             <td class="text-right px-0">
                                 <v-icon
                                     @click="openUpdateModal(item)"
@@ -97,6 +98,12 @@ export default {
                   {
                       text: 'Nome',
                       value: 'name',
+                      sortable: false,
+                      align: 'left'
+                  },
+                  {
+                      text: 'Padrão',
+                      value: 'default',
                       sortable: false,
                       align: 'left'
                   },
@@ -145,6 +152,7 @@ export default {
             const broker = { 
                 _id: this.profileItem._id, 
                 name: this.profileItem.name, 
+                default: this.profileItem.default
             };
 
             if(this.profileItem._id) {
@@ -161,8 +169,8 @@ export default {
             confirm('Tem certeza?') && this.removeAction(item)
         },
         openUpdateModal (item) {
-            const index = this.brokerGetter.indexOf(item)
-            this.profileItem = this.brokerGetter[index]
+            const index = this.profileGetter.indexOf(item)
+            this.profileItem = this.profileGetter[index]
         },
         reset () {
             this.profileItem = {} 

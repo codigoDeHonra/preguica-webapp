@@ -1,10 +1,13 @@
 import * as types from './types';
 
 export const state = {
-    consolidacaoComprovantes: {},
+    breadcrumbs: [],
 };
 
 export const mutations = {
-    [types.MOCK_AVALIACAO_RESULTADOS]() {
+    [types.BREADCRUMB_INSERT](state, data) {
+        state.breadcrumbs.push(data) 
+    },
+    [types.BREADCRUMB_REMOVE]() {
     },
 };

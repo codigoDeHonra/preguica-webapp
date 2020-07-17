@@ -28,14 +28,14 @@
                 <v-data-table
                     v-if="Object.keys(g).length > 0"
                     :headers="headers"
-                    :items="walletGetter"
+                    :items="walletCountGetter"
                     class="elevation-1"
                     :must-sort="true"
                 >
-                    <template  v-slot:item="{ item, index }">
+                    <template  v-slot:item="{ item }">
                         <tr >
                             <td class="text-xs-left">{{ item.name }}</td>
-                            <td class="text-right">{{ walletCountGetter[index].total | money }}</td>
+                            <td class="text-right">{{ item.total | money }}</td>
                             <td class="justify-center layout">
                                 <v-btn
                                     :to="`/minhas-categorias/${item._id}`"
@@ -95,8 +95,8 @@ export default {
         };
     },
     async created() {
-      //await this.syncWalletAction()
-      //await this.syncWalletCountAction()
+      await this.syncWalletAction(this.$route.params.profileId)
+      await this.syncWalletCountAction(this.$route.params.profileId)
     },
     computed: {
         ...mapGetters({
