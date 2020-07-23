@@ -1,3 +1,7 @@
+![img01](docs/image01.png)
+
+
+
 # Preguiça WebApp
 
 Front-end do projeto **preguiça.money** 
