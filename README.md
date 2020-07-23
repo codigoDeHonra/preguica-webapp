@@ -1,6 +1,6 @@
 # Preguiça WebApp
 
-Front-end do projeto preguiça.money 
+Front-end do projeto **preguiça.money** 
 
 ## Instalação
 
@@ -9,14 +9,14 @@ Front-end do projeto preguiça.money
 
 ### Instalação
 
-Instalar as dependencias  
+Instalar as dependencias:  
 ```
 yarn install
 ```
 
 Edite o seu /etc/hosts (OPCIONAL):  
 
-Adicione a linha:  
+Adicione esta linha:  
 ```
 127.0.0.1 app.xn--preguia-zxa.money
 ```
@@ -34,5 +34,9 @@ Acesse o navegador:
 * https://localhost:8080/
 * https://192.168.15.3:8080/
 
-Na primeira vez na 
+No primeiro acesso vai pedir para aceitar o certificado digital.
+
+
+
+Make money!
 
