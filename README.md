@@ -1,6 +1,6 @@
-![img01](docs/image01.png)
-
-
+<p align="center">
+  <img src="docs/preguiça.png" alt="Sublime's custom image"/>
+</p>
 
 # Preguiça WebApp
 
