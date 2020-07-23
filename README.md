@@ -1,42 +1,38 @@
 # Preguiça WebApp
 
-Front end do projeto preguiça.money 
+Front-end do projeto preguiça.money 
 
+## Instalação
 
-## Project setup
+### Requisitos
+* yarn 
+
+### Instalação
+
+Instalar as dependencias  
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+Edite o seu /etc/hosts (OPCIONAL):  
+
+Adicione a linha:  
+```
+127.0.0.1 app.xn--preguia-zxa.money
+```
+
+### Iniciando o servidor de desenvolvimento
+
 ```
 yarn serve
 ```
 
-### Compiles and minifies for production
-```
-yarn build
-```
+Você vera algo parecido:
 
-### Run your tests
-```
-yarn test
-```
 
-### Lints and fixes files
-```
-yarn lint
-```
+Acesse o navegador:
+* https://localhost:8080/
+* https://192.168.15.3:8080/
 
-### Run your end-to-end tests
-```
-yarn run test:e2e
-```
+Na primeira vez na 
 
-### Run your unit tests
-```
-yarn run test:unit
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
