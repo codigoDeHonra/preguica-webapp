@@ -134,7 +134,10 @@
         <v-container
             fluid
         > 
-            <v-breadcrumbs :items="breadcrumbsGetter"></v-breadcrumbs>
+            <v-breadcrumbs 
+                v-if="usuario.email"
+                :items="breadcrumbsGetter"
+            />
             <v-fade-transition mode="out-in">
                 <router-view/>
             </v-fade-transition>
@@ -184,14 +187,6 @@ export default {
       await this.syncUsuarioAction()
       await this.syncCategoryAction()
       await this.syncCategoryByWalletAction(this.$route.params.id)
-      await this.breadcrumbInsertAction({
-                disabled: false, 
-                exact: false,
-                href: '/teste',
-                link: true,
-                text: 'Meus Perfis',
-                to: '/meus-perfis' 
-            })
     },
     computed: {
         ...mapGetters({
@@ -212,7 +207,6 @@ export default {
             setSnackbar: 'noticias/setDados',
             syncCategoryAction: 'category/syncAction',
             syncCategoryByWalletAction: 'category/syncByWalletAction',
-            breadcrumbInsertAction: 'global/breadcrumbInsertAction',
         }),
         logoff(){
             this.removeUsuarioAction()

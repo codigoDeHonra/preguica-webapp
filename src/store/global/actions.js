@@ -14,6 +14,6 @@ export const breadcrumbInsertAction = ({ commit }, params) => {
     commit(types.BREADCRUMB_INSERT, params);
 };
 
-export const breadcrumbRemove = ({ commit }, params) => {
+export const breadcrumbRemoveAction = ({ commit }, params) => {
     commit(types.BREADCRUMB_DELETE, params);
 };

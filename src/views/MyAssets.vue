@@ -234,6 +234,15 @@
       await this.syncAssetAction()
       await this.countAction()
       //await this.syncWalletAction()
+      await this.breadcrumbInsertAction({
+                disabled: false, 
+                exact: false,
+                href: '/meus-ativos',
+                link: true,
+                text: 'Meus Ativos',
+                to: '/meus-ativos',
+                level: 3
+            })
     },
     computed: {
         ...mapGetters({
@@ -348,6 +357,7 @@
             syncBrokerAction: 'broker/syncAction',
             syncAssetAction: 'asset/syncAction',
             syncWalletAction: 'wallet/syncAction',
+            breadcrumbInsertAction: 'global/breadcrumbInsertAction',
         }),
         openInsertModal () {
             this.trade = Object.assign({}, this.defaultValues())

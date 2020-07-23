@@ -151,6 +151,16 @@
       await this.countAction()
       await this.syncCategoryByWalletAction(this.$route.params.id)
 
+      await this.breadcrumbInsertAction({
+                disabled: false, 
+                exact: false,
+                href: '/minhas-categorias',
+                link: true,
+                text: 'Minhas Cartegorias',
+                to: '/minhas-categorias' ,
+                level: 2 
+            })
+
     },
     computed: {
         ...mapGetters({
@@ -255,6 +265,7 @@
             syncCategoryByWalletAction: 'category/syncByWalletAction',
             syncBrokerAction: 'broker/syncAction',
             syncAssetAction: 'asset/syncAction',
+            breadcrumbInsertAction: 'global/breadcrumbInsertAction',
         }),
         openInsertModal () {
             this.trade = Object.assign({}, this.defaultValues())

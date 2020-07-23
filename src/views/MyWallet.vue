@@ -97,6 +97,16 @@ export default {
     async created() {
       await this.syncWalletAction(this.$route.params.profileId)
       await this.syncWalletCountAction(this.$route.params.profileId)
+
+      await this.breadcrumbInsertAction({
+                disabled: false, 
+                exact: false,
+                href: '/minhas-carteiras',
+                link: true,
+                text: 'Minhas Carteiras',
+                to: '/minhas-carteiras',
+                level: 1 
+            })
     },
     computed: {
         ...mapGetters({
@@ -140,6 +150,7 @@ export default {
             syncWalletAction: 'wallet/syncAction',
             syncCategoryAction: 'category/syncAction',
             syncWalletCountAction: 'wallet/syncCountAction',
+            breadcrumbInsertAction: 'global/breadcrumbInsertAction',
         }),
         dynamicColors () {
             var r = Math.floor(Math.random() * 255);

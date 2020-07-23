@@ -74,6 +74,17 @@ export default {
     created() {
         this.syncBrokerAction()
         this.syncProfileAction(this.userGetter._id)
+
+        this.breadcrumbRemoveAction()
+        this.breadcrumbInsertAction({
+                disabled: false, 
+                exact: false,
+                href: '/teste',
+                link: true,
+                text: 'Meus Perfis',
+                to: '/meus-perfis',
+                level: 0
+            })
     },
     computed: {
         ...mapGetters({
@@ -98,6 +109,8 @@ export default {
             insertProfileAction: 'profile/insertAction',
             updateProfileAction: 'profile/updateAction',
             syncProfileAction: 'profile/syncAction',
+            breadcrumbInsertAction: 'global/breadcrumbInsertAction',
+            breadcrumbRemoveAction: 'global/breadcrumbRemoveAction',
         }),
         submit() {
             const broker = { 
