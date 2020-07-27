@@ -328,7 +328,6 @@
             })
 
             this.getDashboard.trades.forEach( (element) => {
-                //console.log( moment(this.beginDate).isAfter(element.date))
                 if(
                     (this.categoryFilter==element.asset.category.name || this.categoryFilter == '' || this.categoryFilter == undefined) &&
                     (this.walletFilter==element.wallet.name || this.walletFilter == '' || this.walletFilter == undefined) &&
@@ -339,7 +338,7 @@
                     d.push({
                         assetObj:element.assetObj ,
                         asset:element.asset ,
-                        broker:element.broker,
+                        broker: element.broker,
                         perc: parseFloat(parseFloat((element.total/total)*100).toFixed(2)),
                         /*investiment: element.total,*/
                         category: element.category,
@@ -387,7 +386,6 @@
             this.dialog = true
         },
         openUpdateModal (item) {
-            console.log(item)
 
             this.modalUpdate = true
             const index = this.getDashboard.trades.indexOf(item)
@@ -398,7 +396,6 @@
         },
         deleteItem (item) {
             const index = this.getDashboard.trades.indexOf(item)
-            // console.log(item)
             item.index = index
             confirm('Tem certeza?') && this.removeAction(item)
         },
