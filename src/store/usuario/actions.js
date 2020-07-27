@@ -72,8 +72,18 @@ export const  setUsuarioAction = ({ commit }, params) => {
     commit(types.SET_USUARIO, params);
 };
 
-export const  syncUsuarioAction = ({ commit }, params) => {
-    commit(types.SYNC_USUARIO, params);
+export const syncUsuarioAction = ({ commit }, params) => {
+-    commit(types.SYNC_USUARIO, params);
+}
+
+export const syncUsersAction = ({ commit }) => {
+    usuario.syncUsers()
+        .then((response) => {
+            const { data } = response
+
+            commit(types.SYNC_USERS, data);
+        })
+        .catch(()=> { });
 };
 
 export const  removeUsuarioAction = ({ commit }) => {

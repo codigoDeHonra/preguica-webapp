@@ -117,6 +117,14 @@ const routes = [
       path: '/config/company',
       name: 'config-company',
       component: () => import(/* webpackChunkName: "MyAssets" */ '../views/Company.vue')
+    },
+    {
+      path: '/admin/user',
+      name: 'admin-user',
+      component: () => import(/* webpackChunkName: "user" */ '../views/User.vue'),
+      meta: {
+          title: 'Usuário'
+      }
     }
   ]
 

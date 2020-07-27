@@ -2,6 +2,7 @@ import * as types from './types';
 
 export const state = {
     usuario: {},
+    users: [],
 };
 
 export const mutations = {
@@ -23,5 +24,8 @@ export const mutations = {
     },
     [types.SYNC_USUARIO](state) {
         state.usuario = JSON.parse(localStorage.getItem('user'));
+    },
+    [types.SYNC_USERS](state, params) {
+        state.users = params;
     },
 };
