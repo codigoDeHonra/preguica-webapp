@@ -18,7 +18,7 @@ export const get = (path, queryParams = '') => vue.axios.get(`${path}${queryPara
 
 export const post = (path, data, config) => vue.axios.post(path, data, config)
 
-export const put = (path, bodyFormData, id) => vue.axios.put(`${path}/${id}`, bodyFormData)
+export const put = (path, bodyFormData, id) => vue.axios.put(`${path}`, bodyFormData)
 
 export const del = (path, id) => vue.axios.delete(`${path}/${id}`)
 

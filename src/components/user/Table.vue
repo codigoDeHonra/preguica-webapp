@@ -12,14 +12,14 @@
                     <v-icon
                         small
                         class="mr-2"
-                        @click="openUpdateModal(item)"
+                        @click="$emit('user-update', item)"
                         >
                         mdi-pencil
                     </v-icon>
                     <v-icon
                         small
-                        @click="deleteItem(item)"
-                        >
+                        @click="$emit('user-remove', item)"
+                    >
                         mdi-delete
                     </v-icon>
                 </td>
@@ -34,8 +34,20 @@ export default {
     name: 'TableUser',
     data() {
         return {
-            name: ''
-        };
+            name: '', 
+            headers: [
+              {
+                  text: 'nome',
+                  sortable: false,
+                  align: 'left'
+              },
+              {
+                  text: 'ações',
+                  sortable: false,
+                  align: 'left'
+              },
+            ]
+        }
     },
     props: ['items'],
     created(){

@@ -39,7 +39,7 @@ export const  setUserLoginAction = ({ commit, dispatch }, params) => {
         });
 };
 
-export const  insertUserAction = ({ commit }, params) => {
+export const  insertUserAction = ({ commit, dispatch}, params) => {
 
     usuario.insert(params)
         .then((response) => {
@@ -56,7 +56,17 @@ export const  insertUserAction = ({ commit }, params) => {
                 { root: true }
             );
 
-            router.push({name: 'login'})
+            if (params.userSync) {
+                dispatch(
+                    'usuario/syncUsersAction', 
+                    null, 
+                    { root: true }
+                )
+            }
+
+            if (params.redirect) {
+                router.push({name: 'login'})
+            }
         })
         .catch(()=> {
             commit('noticias/SET_DADOS', {
@@ -89,4 +99,26 @@ export const syncUsersAction = ({ commit }) => {
 export const  removeUsuarioAction = ({ commit }) => {
     commit(types.REMOVE_USUARIO);
     router.push('/')
+};
+
+export const removeUserListAction = ({ commit }, params) => {
+    usuario.remove(params._id)
+        .then((response) => {
+            const { data } = response
+            data.index = params.index 
+
+            commit(types.REMOVE_USER_LIST, params);
+        })
+        .catch(()=> { });
+};
+
+export const updateAction = ({ commit }, params) => {
+    usuario.update(params)
+        .then((response) => {
+            const { data } = response
+            data.index = params.index 
+
+            commit(types.UPDATE_USER, params);
+        })
+        .catch(()=> { });
 };

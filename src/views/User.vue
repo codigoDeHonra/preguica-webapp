@@ -19,17 +19,26 @@
                 <v-card class="green darken-4 justify-center">
                     <v-card-text class="pt-4 white">
                         <div>
-                            <UserForm />
+                            <UserForm 
+                                @user-insert="submit"
+                                v-model="userItem"
+                            />
                         </div>
                     </v-card-text>
                 </v-card>
             </v-col>
             <v-col cols="6">
-                <user-table :items="usersGetter"/>
+                <user-table 
+                    @user-remove="deleteItem"
+                    @user-update="openUpdateModal"
+                    :items="usersGetter"
+                    />
+
             </v-col>
         </v-row>
     </v-container>
 </template>
+
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import UserTable from '../components/user/Table'
@@ -46,7 +55,7 @@ export default {
             valid: true,
             name: '',
             category: '',
-            assetItem: {},
+            userItem: {}
         };
     },
     async created() {
@@ -80,32 +89,40 @@ export default {
             syncAssetShowAction: 'asset/showAction',
             syncCompanyAssetsAction: 'company/syncCompanyAssetsAction',
             syncUsersAction: 'usuario/syncUsersAction',
+            insertUserAction: 'usuario/insertUserAction',
+            removeUserAction: 'usuario/removeUserListAction',
+            updateUserAction: 'usuario/updateAction',
+
         }),
-        submit() {
-            const asset = { 
-                _id: this.assetItem._id, 
-                name: this.assetItem.name, 
-                category: this.assetItem.category, 
-                price: this.assetItem.price 
+        submit(val) {
+            const user = { 
+                _id: this.userItem._id, 
+                name: this.userItem.name, 
+                email: this.userItem.email, 
+                password: this.userItem.password,
+                redirect: false,
+                userSync: true
             };
 
-            if(this.assetItem._id) {
-                this.updateAssetAction(asset);
+            console.log(user)
+
+            if(user._id) {
+                this.updateUserAction(user);
             } else {
-                this.insertAssetAction(asset);
+                this.insertUserAction(user);
             }
         },
         deleteItem (item) {
-            const index = this.assetGetter.indexOf(item)
+            const index = this.usersGetter.indexOf(item)
             item.index = index
-            confirm('Tem certeza?') && this.removeAction(item)
+            confirm('Tem certeza?') && this.removeUserAction(item)
         },
         openUpdateModal (item) {
-            const index = this.assetGetter.indexOf(item)
-            this.assetItem = this.assetGetter[index]
+            const index = this.usersGetter.indexOf(item)
+            this.userItem = this.usersGetter[index]
         },
         reset () {
-            this.assetItem = {} 
+            this.userItem = {} 
         },
     }
 }

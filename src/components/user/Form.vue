@@ -4,7 +4,7 @@
                     v-model="valid"
                 >
                     <v-text-field
-                        v-model="name"
+                        v-model="value.name"
                         required
                         filled
                         prepend-icon="mdi-account-circle"
@@ -12,7 +12,7 @@
                         :rules="nameRules"
                         />
                     <v-text-field
-                        v-model="email"
+                        v-model="value.email"
                         required
                         filled
                         prepend-icon="mdi-email"
@@ -61,6 +61,7 @@ export default {
     components: {
         CancelBtn
     },
+    props:['value'],
     data() {
         return {
             valid: false,
@@ -89,6 +90,8 @@ export default {
             usuarioGetter: 'usuario/usuarioGetter',
         }),
     },
+    mounted() {
+    },
     watch: {
         usuarioGetter(value) {
             if (value.status) {
@@ -101,8 +104,13 @@ export default {
             insertUserAction: 'usuario/insertUserAction',
         }),
         submit() {
-            const user = { name: this.name, email: this.email, password: this.password };
-            this.insertUserAction(user);
+            const user = { 
+                name: this.name, 
+                email: this.email, 
+                password: this.password 
+            };
+
+            this.$emit('user-insert', user)
         },
     }
 }

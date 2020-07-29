@@ -1,5 +1,6 @@
 export const SET_USUARIO = 'SET_USUARIO';
 export const REMOVE_USUARIO = 'REMOVE_USUARIO';
+export const REMOVE_USER_LIST = 'REMOVE_USER_LIST';
 export const SET_USUARIO_LOGIN = 'SET_USUARIO_LOGIN';
 export const SYNC_USUARIO = 'SYNC_USUARIO';
 export const SYNC_USERS = 'SYNC_USERS';

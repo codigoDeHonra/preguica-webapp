@@ -1,4 +1,5 @@
 import * as types from './types';
+import vue from 'vue';
 
 export const state = {
     usuario: {},
@@ -17,6 +18,10 @@ export const mutations = {
         state.usuario = {}
         localStorage.removeItem('user');
         localStorage.removeItem('token');
+    },
+    [types.REMOVE_USER_LIST](state, params) {
+        console.log(params)
+        vue.delete(state.users, params.index)
     },
     [types.SET_USUARIO_LOGIN](state, params) {
         state.usuario = params

@@ -8,8 +8,8 @@ export const insert = (data) => http.post('/user', data);
 
 export const login = (data) => http.post('/auth/login', data);
 
-export const remove = (data) => http.del(`/trade`, data);
+export const remove = (data) => http.del(`/user`, data);
 
-export const update = (data) => http.put(`/trade`, data, data._id);
+export const update = (data) => http.put(`/user`, data);
 
 

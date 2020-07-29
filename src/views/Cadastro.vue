@@ -127,7 +127,11 @@ export default {
             insertUserAction: 'usuario/insertUserAction',
         }),
         submit() {
-            const user = { name: this.name, email: this.email, password: this.password };
+            const user = { name: this.name, 
+                email: this.email, 
+                password: this.password ,
+                redirect: true
+            };
             this.insertUserAction(user);
         },
     }
