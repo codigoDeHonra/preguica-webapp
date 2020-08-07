@@ -11,7 +11,9 @@
             <v-col
                 cols="12"
             >
-                <v-subheader><h2>Importar CEI</h2></v-subheader>
+                <v-subheader>
+                    <v-icon>mdi-file-import-outline</v-icon>
+                    <h2> Importar CEI</h2></v-subheader>
             </v-col>
             <v-col
                 cols="6"
@@ -31,6 +33,16 @@
                                         item-text="name"
                                         item-value="_id"
                                         label="Corretora"
+                                        v-model="broker"
+                                    ></v-select>
+                                </v-flex>
+                                <v-flex xs12 >
+                                    <v-select
+                                        :items="brokerGetter"
+                                        filled
+                                        item-text="name"
+                                        item-value="_id"
+                                        label="Categoria"
                                         v-model="broker"
                                     ></v-select>
                                 </v-flex>

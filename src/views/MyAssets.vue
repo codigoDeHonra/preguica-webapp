@@ -11,7 +11,7 @@
                 align-center
                 justify-center
             >
-                <v-col cols="6">
+                <v-col xl="3" cols="6">
                     <bar v-if="Object.keys(g).length > 0" :chart-data="g"></bar>
                 </v-col>
             </v-row>

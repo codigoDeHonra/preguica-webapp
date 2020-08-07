@@ -52,9 +52,10 @@
           <v-btn text to="/dashboard">Painel</v-btn>
           <v-spacer></v-spacer>
           <v-menu :nudge-width="100">
-            <template v-slot:activator="{ on }">
 
+            <template v-slot:activator="{ on }">
               <v-btn text v-on="on">
+                  <v-icon>mdi-cog-outline</v-icon>
                   Configuração
                 <v-icon>mdi-menu-down</v-icon>
               </v-btn>
@@ -87,7 +88,8 @@
               </v-list-item>
               <v-list-item @click="$router.push('/config/company')">
                 <v-list-tile-title >
-                  Company 
+                  <v-icon>mdi-domain</v-icon>
+                  Companhia 
                 </v-list-tile-title>
               </v-list-item>
               <v-list-item @click="$router.push('/ativo')">
@@ -98,6 +100,7 @@
               </v-list-item>
               <v-list-item @click="$router.push('/config/importar')">
                 <v-list-tile-title >
+                  <v-icon>mdi-file-import-outline</v-icon>
                   Importar CEI 
                 </v-list-tile-title>
               </v-list-item>
