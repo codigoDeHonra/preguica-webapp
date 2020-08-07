@@ -104,6 +104,12 @@
                   Importar CEI 
                 </v-list-tile-title>
               </v-list-item>
+              <v-list-item @click="$router.push('/admin/user')">
+                <v-list-tile-title >
+                  <v-icon>mdi-user</v-icon>
+                  Usuário
+                </v-list-tile-title>
+              </v-list-item>
             </v-list>
           </v-menu> 
 
