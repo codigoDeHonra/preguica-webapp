@@ -2,6 +2,7 @@ import * as types from './types';
 
 export const state = {
     profiles: [],
+    count:[]
 };
 
 export const mutations = {
@@ -12,6 +13,9 @@ export const mutations = {
     },
     [types.SYNC_PROFILE](state, data) {
         state.profiles = data;
+    },
+    [types.SYNC_COUNT_PROFILE](state, data) {
+        state.count = data;
     },
     [types.SHOW_PROFILE](state, data) {
         state.studyItem = data;

@@ -76,6 +76,27 @@ export const syncAction = ({ commit, dispatch }, params) => {
         .catch((e)=> { console.log(e)})
 };
 
+export const syncCountAction = ({ commit }, params) => {
+    study.count(params)
+        .then((response) => {
+            commit(types.SYNC_COUNT_PROFILE, response.data);
+
+            // dispatch(
+            //     'wallet/syncAction', 
+            //     response.data[0]._id,
+            //     { root: true }
+            // );
+
+            // dispatch(
+            //     'wallet/syncCountAction', 
+            //     response.data[0]._id,
+            //     { root: true }
+            // );
+
+        })
+        .catch((e)=> { console.log(e)})
+};
+
 export const showAction = ({ commit }, params) => {
    console.log(params) 
     study.show(params)

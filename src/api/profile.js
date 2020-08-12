@@ -2,7 +2,7 @@ import * as http from './http';
 
 export const sync = (data) => http.get(`/profile/user/${data}`);
 
-export const count = () => http.get('/profiles/count');
+export const count = () => http.get('/profile/count');
 
 export const insert = (data) => http.post('/profile', data);
 

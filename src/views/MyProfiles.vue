@@ -16,13 +16,14 @@
             >
                 <v-data-table
                     :headers="headers"
-                    :items="profileGetter"
+                    :items="profileCountGetter"
                     class="elevation-1"
                     :must-sort="true"
                 >
                     <template v-slot:item="{ item }">
                         <tr>
                             <td class="text-xs-left">{{ item.name }}</td>
+                            <td class="text-xs-left">{{ item.total }}</td>
                             <td class="text-right px-0">
                                 <v-btn :to="{ 
                                     name: 'my-wallets', 
@@ -59,6 +60,12 @@ export default {
                       align: 'left'
                   },
                   {
+                      text: 'Total',
+                      value: 'total',
+                      sortable: false,
+                      align: 'left'
+                  },
+                  {
                       text: 'Ações',
                       value: null,
                       sortable: false,
@@ -71,9 +78,10 @@ export default {
             }
         };
     },
-    created() {
+    created () {
         this.syncBrokerAction()
         this.syncProfileAction(this.userGetter._id)
+        this.syncProfileCountAction()
 
         this.breadcrumbRemoveAction()
         this.breadcrumbInsertAction({
@@ -90,6 +98,7 @@ export default {
         ...mapGetters({
             brokerGetter: 'broker/brokerGetter',
             profileGetter: 'profile/profileGetter',
+            profileCountGetter: 'profile/profileCountGetter',
             userGetter: 'usuario/usuarioGetter',
         }),
     },
@@ -109,8 +118,10 @@ export default {
             insertProfileAction: 'profile/insertAction',
             updateProfileAction: 'profile/updateAction',
             syncProfileAction: 'profile/syncAction',
+            syncProfileCountAction: 'profile/syncCountAction',
             breadcrumbInsertAction: 'global/breadcrumbInsertAction',
             breadcrumbRemoveAction: 'global/breadcrumbRemoveAction',
+
         }),
         submit() {
             const broker = { 
