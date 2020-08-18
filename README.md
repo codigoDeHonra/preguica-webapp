@@ -11,6 +11,10 @@ Front-end do projeto **preguiça.money**
 * Telegram: https://t.me/preguica_money
 
 
+# Backend
+* https://github.com/codigoDeHonra/preguica-api
+
+
 ## Instalação
 
 ### Requisitos
