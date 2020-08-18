@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/preguiça.png" alt="Sublime's custom image"/>
+  <img width="100px" src="docs/preguiça.png" alt="Sublime's custom image"/>
 </p>
 
 # Preguiça WebApp
