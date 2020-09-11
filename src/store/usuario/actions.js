@@ -122,3 +122,25 @@ export const updateAction = ({ commit }, params) => {
         })
         .catch(()=> { });
 };
+
+export const activateAction = ({ commit }, params) => {
+    usuario.updateActive(params)
+        .then((response) => {
+            const { data } = response
+            data.index = params.index 
+
+            commit(types.ACTIVATE_USER, params);
+        })
+        .catch(()=> { });
+};
+
+export const deactivateAction = ({ commit }, params) => {
+    usuario.updateActive(params)
+        .then((response) => {
+            const { data } = response
+            data.index = params.index 
+
+            commit(types.DEACTIVATE_USER, params);
+        })
+        .catch(()=> { });
+};

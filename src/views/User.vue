@@ -11,7 +11,7 @@
             <v-col
                 cols="12"
             >
-            <v-subheader><h2>{{$route.meta.title}}</h2></v-subheader>
+                <v-subheader><h2>{{$route.meta.title}}</h2></v-subheader>
             </v-col>
             <v-col
                 cols="6"
@@ -31,9 +31,11 @@
                 <user-table 
                     @user-remove="deleteItem"
                     @user-update="openUpdateModal"
-                    :items="usersGetter"
-                    />
+                    @user-deactivate="deactivate"
+                    @user-activate="activate"
 
+                    :items="usersGetter"
+                />
             </v-col>
         </v-row>
     </v-container>
@@ -92,9 +94,19 @@ export default {
             insertUserAction: 'usuario/insertUserAction',
             removeUserAction: 'usuario/removeUserListAction',
             updateUserAction: 'usuario/updateAction',
+            deactivateUserAction: 'usuario/deactivateAction',
+            activateUserAction: 'usuario/activateAction',
 
         }),
-        submit(val) {
+        activate(val) {
+            val.active = true
+            this.activateUserAction(val)
+        },
+        deactivate(val) {
+            val.active = false 
+            this.deactivateUserAction(val)
+        },
+        submit () {
             const user = { 
                 _id: this.userItem._id, 
                 name: this.userItem.name, 

@@ -8,20 +8,39 @@
         <template v-slot:item="{ item }">
             <tr>
                 <td class="text-xs-left">{{ item.name }}</td>
+                <td class="text-xs-left">{{ item.active }}</td>
                 <td class="justify-center layout px-0">
                     <v-icon
                         small
                         class="mr-2"
                         @click="$emit('user-update', item)"
-                        >
+                    >
                         mdi-pencil
                     </v-icon>
                     <v-icon
                         small
+                        class="mr-2"
                         @click="$emit('user-remove', item)"
                     >
                         mdi-delete
                     </v-icon>
+                    <v-icon
+                        v-if="!item.active"
+                        small
+                        class="mr-2"
+                        @click="$emit('user-activate', item)"
+                    >
+                        mdi-check-outline
+                    </v-icon>
+                    <v-icon
+                        v-if="item.active"
+                        small
+                        class="mr-2"
+                        @click="$emit('user-deactivate', item)"
+                    >
+                        mdi-close-outline
+                    </v-icon>
+
                 </td>
             </tr>
         </template>
@@ -42,9 +61,14 @@ export default {
                   align: 'left'
               },
               {
-                  text: 'ações',
+                  text: 'ativo',
                   sortable: false,
                   align: 'left'
+              },
+              {
+                  text: 'ações',
+                  sortable: false,
+                  align: 'center'
               },
             ]
         }

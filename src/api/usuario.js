@@ -12,4 +12,4 @@ export const remove = (data) => http.del(`/user`, data);
 
 export const update = (data) => http.put(`/user`, data);
 
-
+export const updateActive = (data) => http.put(`/user/active`, data);
