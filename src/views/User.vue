@@ -14,7 +14,7 @@
                 <v-subheader><h2>{{$route.meta.title}}</h2></v-subheader>
             </v-col>
             <v-col
-                cols="6"
+                cols="4"
             >
                 <v-card class="green darken-4 justify-center">
                     <v-card-text class="pt-4 white">
@@ -57,7 +57,7 @@ export default {
             valid: true,
             name: '',
             category: '',
-            userItem: {}
+            userItem: {},
         };
     },
     async created() {

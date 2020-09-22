@@ -59,35 +59,10 @@
                         hide-details
                         filled
                     />
-                    <v-data-table
-                        :headers="headers"
-                        :items="assets"
-                        class="elevation-1"
-                        :must-sort="true"
-                        :search="search"
-                    >
-                        <template v-slot:item="{ item, index }">
-                            <tr>
-                                <td class="text-xs-left">{{ index + 1  }}</td>
-                                <td class="text-center">
-                                    <v-btn 
-                                        text
-                                        :to="{ name: 'asset-details', params: { code: item.asset.name}}">
-                                        {{ item.asset.name }}
-                                    </v-btn>
-                                </td>
-                                <td class="text-xs-left">{{ item.wallet }}</td>
-                                <td class="text-xs-left">{{ item.category }}</td>
-                                <td class="text-right">{{ item.amount }}</td>
-                                <td class="text-right">{{ item.investiment.toFixed(2) }}</td>
-                                <td class="text-right">{{ item.investimentNow.toFixed(2) }}</td>
-                                <td class="text-right">{{ item.pnl.toFixed(2) }}</td>
-                                <td class="text-right">{{ item.mediumPrice.toFixed(2) }}</td>
-                                <td class="text-right">{{ item.price }}</td>
-                                <td class="text-right">{{ item.perc }}</td>
-                            </tr>
-                        </template>
-                    </v-data-table>
+                    <TableAsset 
+                        :items="getCount" 
+                        :search="search" 
+                    />
                 </v-col>
             </v-row>
         </v-container>
@@ -99,10 +74,12 @@
   import moment from 'moment';
   import vue from 'vue';
   import Bar from '../components/Pie'
+  import TableAsset from '../components/asset/Table'
 
   export default {
     name: 'MyAssets',
       components:{
+          TableAsset,
           Bar
       },
     data(){
@@ -118,84 +95,6 @@
           dialog: false,
           modalUpdate: false,
           tabActive: null,
-          headers:[
-              {
-                  text: '#',
-                  sortable: false,
-                  align: 'left',
-                  filterable: false,
-              },
-              {
-                  text: 'Ativo',
-                  value: 'asset.name',
-                  align: 'center',
-                  sortable: true,
-                  filterable: true,
-              },
-              {
-                  text: 'Carteira',
-                  value: 'wallet',
-                  align: 'left',
-                  sortable: true,
-                  filterable: true,
-              },
-              {
-                  text: 'Categoria',
-                  value: 'category',
-                  align: 'left',
-                  sortable: true,
-                  filterable: false,
-              },
-              {
-                  text: 'Quantidade',
-                  value: 'category',
-                  align: 'right',
-                  sortable: true,
-                  filterable: false,
-              },
-              {
-                  text: 'Investimento',
-                  value: 'asset.invesment',
-                  align: 'right',
-                  sortable: true,
-                  filterable: false,
-              },
-              {
-                  text: 'Investimento Atual',
-                  value: 'asset.invesmentNow',
-                  align: 'right',
-                  sortable: true,
-                  filterable: false,
-              },
-              {
-                  text: 'L/P',
-                  value: 'asset.invesmentNow',
-                  align: 'right',
-                  sortable: true,
-                  filterable: false,
-              },
-              {
-                  text: 'Preço medio',
-                  value: 'category',
-                  align: 'right',
-                  sortable: true,
-                  filterable: false,
-              },
-              {
-                  text: 'Preço Atual',
-                  value: 'asset.price',
-                  align: 'right',
-                  sortable: true,
-                  filterable: false,
-              },
-              {
-                  text: '%',
-                  value: 'perc',
-                  align: 'right',
-                  filterable: false,
-                  sortable: true,
-              },
-          ],
           editedIndex: -1,
           trade: {
               date: new Date().toISOString().substr(0, 10),

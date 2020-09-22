@@ -9,6 +9,7 @@
             </v-col>
         </v-row>
         <v-row
+            v-if="Object.keys(g).length > 0"
             flex
             align-center
             justify-center
@@ -50,6 +51,14 @@
                     </template>
                 </v-data-table>
             </v-col>
+        </v-row>
+        <v-row
+            v-if="!(Object.keys(g).length > 0)"
+            flex
+            align-center
+            justify-center
+        >
+            <p>Sem dados</p>
         </v-row>
     </v-container>
 </template>
