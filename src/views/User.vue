@@ -65,6 +65,7 @@ export default {
       await this.syncCategoryAction()
       await this.syncCompanyAssetsAction()
       await this.syncUsersAction()
+      await this.breadcrumb()
     },
     computed: {
         ...mapGetters({
@@ -96,7 +97,8 @@ export default {
             updateUserAction: 'usuario/updateAction',
             deactivateUserAction: 'usuario/deactivateAction',
             activateUserAction: 'usuario/activateAction',
-
+            breadcrumbInsertAction: 'global/breadcrumbInsertAction',
+            breadcrumbRemoveAction: 'global/breadcrumbRemoveAction',
         }),
         activate(val) {
             val.active = true
@@ -135,6 +137,29 @@ export default {
         },
         reset () {
             this.userItem = {} 
+        },
+        breadcrumb () {
+            this.breadcrumbRemoveAction()
+
+            this.breadcrumbInsertAction({
+                disabled: false, 
+                exact: false,
+                href: '/admin',
+                link: true,
+                text: 'Admin',
+                to: '/admin',
+                level: 0
+            })
+
+            this.breadcrumbInsertAction({
+                disabled: false, 
+                exact: false,
+                href: '/admin/user',
+                link: false,
+                text: 'Usuário',
+                to: '/admin/user',
+                level: 1 
+            })
         },
     }
 }
