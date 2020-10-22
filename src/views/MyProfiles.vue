@@ -6,13 +6,16 @@
         <v-row
             flex
             align-center
-            justify-center
+            justify="center"
         >
-            <v-col cols="12">
+            <v-col
+                xl="10"
+                cols="12">
                 <v-subheader><h3>Meus do Perfis</h3></v-subheader>
             </v-col>
             <v-col
-                cols="6"
+                cols="12"
+                xl="10"
             >
                 <v-data-table
                     :headers="headers"

@@ -7,7 +7,7 @@ export const state = {
 
 export const mutations = {
     [types.INSERT_PROFILE](state, params) {
-        state.asset.push(params)
+        state.profiles.push(params)
     },
     [types.REMOVE_PROFILE]() {
     },

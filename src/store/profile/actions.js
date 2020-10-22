@@ -30,9 +30,9 @@ import * as study from '@/api/profile'
 export const  insertAction = ({ commit }, params) => {
 
     study.insert(params)
-        .then((response) => {
-            const { data } = response
-            commit(types.INSERT_STUDY, data.study)
+        .then(() => {
+            // const { data } = response
+            commit(types.INSERT_PROFILE, params)
             commit('noticias/SET_DADOS', {
                 ativo: true,
                 color: 'green',
@@ -40,7 +40,8 @@ export const  insertAction = ({ commit }, params) => {
             },
             { root: true });
         })
-        .catch(()=> {
+        .catch((error)=> {
+            console.log(error)
             commit('noticias/SET_DADOS', {
                 ativo: true,
                 color: 'red',
