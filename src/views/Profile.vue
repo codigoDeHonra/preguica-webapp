@@ -52,31 +52,18 @@
             <v-col
                 cols="6"
             >
-                <v-data-table
-                    :headers="headers"
-                    :items="profileGetter"
-                    class="elevation-1"
-                    :must-sort="true"
-                >
-                <template  v-slot:item="{ item }">
-                        <tr >
-                            <td class="text-xs-left">{{ item.name }}</td>
-                            <td class="text-xs-left">{{ item.default }}</td>
-                            <td class="text-right px-0">
-                                <v-icon
-                                    @click="openUpdateModal(item)"
-                                >
-                                    mdi-pencil
-                                </v-icon>
-                                <v-icon
-                                    @click="deleteItem(item)"
-                                >
-                                    mdi-delete
-                                </v-icon>
-                            </td>
-                        </tr>
-                    </template>
-                </v-data-table>
+                    <v-text-field
+                        v-model="search"
+                        append-icon="mdi-magnify"
+                        label="Pesquisa"
+                        single-line
+                        hide-details
+                        filled
+                    />
+            <Table 
+                :items="profileGetter"
+                :search="search"
+            />
             </v-col>
         </v-row>
     </v-container>
@@ -84,14 +71,17 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import CancelBtn from '../components/app/CancelBtn';
+import Table from '../components/profile/Table';
 
 export default {
     name:'Profile',
     components:{
-        CancelBtn
+        CancelBtn,
+        Table
     },
     data() {
         return {
+            search: '',
             valid: true,
             name: '',
             headers:[
